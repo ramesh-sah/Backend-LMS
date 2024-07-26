@@ -1,0 +1,27 @@
+COMPANY
+
+id               uuid           (NULL)           NO      PRI     (NULL)   auto_increment  select,insert,update,references
+college_name             varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+college_code             varchar(10)       utf8_general_ci  YES             (NULL)                   select,insert,update,references
+college_address          varchar(1024)     utf8_general_ci  YES             (NULL)                   select,insert,update,references
+college_city             varchar(128)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+college_contact          varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+college_email            varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+email_default            varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+email_registration       varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+email_account            varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+email_activity           varchar(255)      utf8_general_ci  YES             (NULL)                   select,insert,update,references
+branch_allowed           enum('yes','no')  utf8_general_ci  YES             (NULL)                   select,insert,update,references
+branch_numbers           int(11)           (NULL)           YES             (NULL)                   select,insert,update,references
+learning_center_allowed  enum('yes','no')  utf8_general_ci  YES             (NULL)                   select,insert,update,references
+learning_center_numbers  int(11)           (NULL)           YES             (NULL)                   select,insert,update,references
+data_status              tinyint(1)        (NULL)           YES
+company_logo
+
+UNIVERSITY
+id      uuid(11)                    (NULL)           NO      PRI     (NULL)   auto_increment  select,insert,update,references
+university_name    varchar(128)               utf8_general_ci  NO              (NULL)                   select,insert,update,references
+university_code    varchar(10)                utf8_general_ci  NO              (NULL)                   select,insert,update,references
+receipt_via        varchar(128)        utf8_general_ci  NO              (NULL)                   select,insert,update,references
+university_status  enum('active','inactive')  utf8_general_ci  NO              (NULL)                   select,insert,update,references
+data_status        tinyint(4)
