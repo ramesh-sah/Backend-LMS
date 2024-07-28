@@ -27,7 +27,7 @@ class MemberController extends BaseController
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'dob' => 'required|date',
-            'roll_number' => 'required|integer',
+            'roll_number' => 'required|integer|unique:members,roll_number',
             'address' => 'required|string|max:500',
             'gender' => 'required|in:male,female,other',
             'email' => 'required|email|regex:/@patancollege\.edu\.np$/|unique:members,email',
