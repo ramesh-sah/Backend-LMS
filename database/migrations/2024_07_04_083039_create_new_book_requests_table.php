@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('book_name', 225);
             $table->string('author_name', 225);
             $table->date('request_date')->default(now());
-            $table->string('member_id');
-            $table->foreign('member_id')->references('member_id')->on('members')->onDelete('cascade');
-            $table->string('employee_id')->default('');
-            $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
+            $table->string('member_id')->nullable();
+            $table->foreign('member_id')->references('member_id')->on('members');
+            $table->string('employee_id')->nullable();
+            $table->foreign('employee_id')->references('employee_id')->on('employees');
             $table->timestamps();
             $table->softDeletes();
         });

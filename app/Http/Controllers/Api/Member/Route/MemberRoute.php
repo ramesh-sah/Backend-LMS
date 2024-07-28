@@ -23,7 +23,6 @@ Route::prefix('/member')->group(function () {
 });
 Route::prefix('/admin/member')->middleware(['auth:admin'])->group(function () {
     Route::post('/register', [MemberController::class, 'registerMember'])->name('registerMember');
-    Route::post('/login', [MemberController::class, 'loginMember'])->name('loginMember');
     Route::post('/logout', [MemberController::class, 'logoutMember'])->name('logoutMember');
     Route::get('/getAllMember', [MemberController::class, 'getAllMember']);
     Route::get('/{member_id}', [MemberController::class, 'getMember'])->name('user.getMember');

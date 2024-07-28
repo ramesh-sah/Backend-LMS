@@ -65,6 +65,17 @@ class BookReservationController extends Controller
             'employee_id' => 'exists:employees,employee_id',
             'reservation_status' => 'required|in:pending,approved,rejected,expired'
         ]);
+        $book = Book::find($request->book_id);
+        if ($book->book_status !== 'available') {
+            return response()->json([
+                'message' => 'Book is not available',
+            ], 400);
+        }
+
+        // Update the book status to reserved
+        $book->book_status = 'reserved';
+        $book->save();
+
 
         $reservation = BookReservation::create($request->all()); // Create a new Book Reservation instance
         return response()->json([[

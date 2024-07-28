@@ -4,10 +4,32 @@ use App\Http\Controllers\Api\Issue\Controller\IssueController;
 use Illuminate\Support\Facades\Route;
 
 // Define the routes for Issue
-Route::prefix('/issue')->middleware(['auth:sanctum'])->group(function () {
-    Route::get('/', [IssueController::class, 'index']);
-    Route::get('/{id}', [IssueController::class, 'show']);
-    Route::post('/', [IssueController::class, 'store']);
-    Route::put('/{id}', [IssueController::class, 'update']);
-    Route::delete('/{id}', [IssueController::class, 'destroy']);
+Route::prefix('/admin/issue')->middleware(['auth:admin'])->group(function () {
+    Route::get('/getAllIssue', [IssueController::class, 'getAllIssue']);
+    Route::get('/getUserAllIssue', [IssueController::class, 'getSpecificUserAllIssue']);
+    Route::get('/{issue_id}', [IssueController::class, 'getIssue']);
+    Route::post('/', [IssueController::class, 'postIssue']);
+    Route::put('/{issue_id}', [IssueController::class, 'updateIssue']);
+    Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
 });
+
+Route::prefix('/employee/issue')->middleware(['auth:admin'])->group(function () {
+    Route::get('/getAllIssue', [IssueController::class, 'getAllIssue']);
+    Route::get('/getUserAllIssue', [IssueController::class, 'getSpecificUserAllIssue']);
+    Route::get('/{issue_id}', [IssueController::class, 'getIssue']);
+    Route::post('/', [IssueController::class, 'postIssue']);
+    Route::put('/{issue_id}', [IssueController::class, 'updateIssue']);
+    Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
+});
+
+
+Route::prefix('/admin/issue')->middleware(['auth:admin'])->group(function () {
+    Route::get('/getAllIssue', [IssueController::class, 'getAllIssue']);
+    Route::get('/getUserAllIssue', [IssueController::class, 'getSpecificUserAllIssue']);
+    Route::get('/{issue_id}', [IssueController::class, 'getIssue']);
+    Route::post('/', [IssueController::class, 'postIssue']);
+    Route::put('/{issue_id}', [IssueController::class, 'updateIssue']);
+    Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
+});
+
+

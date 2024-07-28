@@ -30,7 +30,6 @@ Route::prefix('/employee')->group(function () {
 Route::prefix('/admin/employee')->middleware(['auth:admin'])->group(function () {
 
     Route::post('/register', [EmployeeController::class, 'registerEmployee'])->name('registerEmployee');
-    Route::post('/login', [EmployeeController::class, 'loginEmployee'])->name('loginEmployee');
     Route::post('/logout', [EmployeeController::class, 'logoutEmployee'])->name('logoutEmployee');
     Route::get('/getAllEmployee', [EmployeeController::class, 'getAllEmployee'])->name('user.getAllEmployee');
     Route::get('/{employee_id}', [EmployeeController::class, 'getEmployee'])->name('user.getEmployee');
