@@ -62,12 +62,12 @@ class EmployeeController extends BaseController
 
         $token = $employee->createToken('admin token', ['employee'])->plainTextToken; //created the admin token
 
-        return response()->json([[
+        return response()->json([
             'data' => [
                 'employee data' => $employee->jsonSerialize(),
                 'token' => $token,
             ]
-        ], 201]);
+        ], 201);
     }
 
     public function logoutEmployee(Request $request)
@@ -92,9 +92,9 @@ class EmployeeController extends BaseController
         $employee = Employee::where('email', $request->email)->first();
 
         if (!$employee) {
-            return response()->json([[
+            return response()->json([
                 'message' => 'Employee not found or Invalid email provided.',
-            ], 404]);
+            ], 404);
         }
 
         if (!$employee || !Hash::check($request->password, $employee->password)) {
@@ -141,13 +141,13 @@ class EmployeeController extends BaseController
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $employee->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $employee->currentPage(),
             'last_page' => $employee->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -173,10 +173,10 @@ class EmployeeController extends BaseController
 
         $employee->update($request->all());
 
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'employee' => $employee // Return the updated book reservation data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyEmployee(string $employee_id)
@@ -187,8 +187,8 @@ class EmployeeController extends BaseController
             return response()->json(['message' => 'employee not found'], 404); // Handle not found cases
         }
         $employee->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

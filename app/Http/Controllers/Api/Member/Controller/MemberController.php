@@ -21,6 +21,7 @@ class MemberController extends BaseController
      */
     public function registerMember(Request $request)
     {
+
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -54,14 +55,14 @@ class MemberController extends BaseController
 
         $token = $member->createToken('mytoken', ['member'])->plainTextToken;
 
-        return response()->json([[
-            [ // Wrap the data in an array
-                'data' => [
-                    'member' => $member,
-                    'token' => $token,
-                ]
-            ]
-        ], 201]);
+        return response()->json(
+            // Wrap the data in an array
+            [
+                'member' => $member,
+                'token' => $token,
+            ],
+            201
+        );
     }
 
     public function logoutMember(Request $request)
@@ -69,13 +70,15 @@ class MemberController extends BaseController
         $token = $request->user()->currentAccessToken();
         $request->user()->tokens()->where('id', $token->id)->delete();
 
-        return response()->json([[
+        return response()->json(
 
             [
                 'success' => true,
                 'message' => 'User logged out',
+
             ],
-        ], 200]);
+            200
+        );
     }
 
     public function loginMember(Request $request)
@@ -88,15 +91,15 @@ class MemberController extends BaseController
         $member = Member::where('email', $request->email)->first();
 
         if (!$member) {
-            return response()->json([[
+            return response()->json([
                 'message' => 'User not found or Invalid email provided.',
-            ], 404]);
+            ], 404);
         }
 
         if (!$member || !Hash::check($request->password, $member->password)) {
-            return response()->json([[
+            return response()->json([
                 'message' => 'Invalid password provided.',
-            ], 401]);
+            ], 401);
         }
 
         $token = $member->createToken('mytoken', ['member'])->plainTextToken;
@@ -139,13 +142,13 @@ class MemberController extends BaseController
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $member->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $member->currentPage(),
             'last_page' => $member->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -171,10 +174,10 @@ class MemberController extends BaseController
 
         $member->update($request->all());
 
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'member' => $member // Return the updated book reservation data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyMember(string $member_id)
@@ -185,8 +188,8 @@ class MemberController extends BaseController
             return response()->json(['message' => 'member not found'], 404); // Handle not found cases
         }
         $member->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

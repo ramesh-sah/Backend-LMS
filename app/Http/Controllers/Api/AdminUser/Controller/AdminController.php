@@ -49,12 +49,12 @@ class AdminController extends BaseController
 
         $token = $admin->createToken('admin token', ['admin'])->plainTextToken; //created the admin token
 
-        return response()->json([[
+        return response()->json([
             'data' => [
                 'admin user' => $admin->jsonSerialize(),
                 'token' => $token,
             ]
-        ], 201]);
+        ], 201);
     }
 
     public function logoutAdmin(Request $request)
@@ -63,10 +63,10 @@ class AdminController extends BaseController
         $token = $request->user('admin')->currentAccessToken();
         $request->user('admin')->tokens()->where('id', $token->id)->delete();
 
-        return response()->json([[
+        return response()->json([
             'success' => true,
             'message' => 'Admin user logged out',
-        ], 200]);
+        ], 200);
     }
 
     public function loginAdmin(Request $request)
@@ -79,15 +79,15 @@ class AdminController extends BaseController
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin) {
-            return response()->json([[
+            return response()->json([
                 'message' => 'Admin not found or Invalid email provided.',
-            ], 404]);
+            ], 404);
         }
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return response()->json([[
+            return response()->json([
                 'message' => 'Invalid password provided.',
-            ], 401]);
+            ], 401);
         }
 
         $token = $admin->createToken('mytoken', ['admin'])->plainTextToken; //created the admin token after the login
@@ -126,13 +126,13 @@ class AdminController extends BaseController
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $admin->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $admin->currentPage(),
             'last_page' => $admin->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -158,10 +158,10 @@ class AdminController extends BaseController
 
         $admin->update($request->all());
 
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'admin' => $admin // Return the updated book reservation data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyAdmin(string $admin_id)
@@ -172,8 +172,8 @@ class AdminController extends BaseController
             return response()->json(['message' => 'admin not found'], 404); // Handle not found cases
         }
         $admin->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

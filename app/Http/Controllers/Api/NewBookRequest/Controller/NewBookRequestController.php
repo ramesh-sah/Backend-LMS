@@ -51,13 +51,13 @@ class NewBookRequestController extends Controller
             $total
         );
 
-        return response()->json([[
+        return response()->json([
             'data' => $paginatedResult->items(),
             'total' => $paginatedResult->total(),
             'per_page' => $paginatedResult->perPage(),
             'current_page' => $paginatedResult->currentPage(),
             'last_page' => $paginatedResult->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
     public function postNewBookRequest(Request $request)
@@ -71,10 +71,10 @@ class NewBookRequestController extends Controller
         ]);
 
         $newBookRequest = NewBookRequest::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'newBookRequest ' => $newBookRequest  // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getNewBookRequest(string $request_id)
@@ -98,10 +98,10 @@ class NewBookRequestController extends Controller
             return response()->json(['message' => 'New Book Request not found'], 404); // Handle not found cases
         }
         $newBookRequest->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'newBookRequest' => $newBookRequest // Return the updated publisher data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyNewBookRequest(string $request_id)
@@ -112,8 +112,8 @@ class NewBookRequestController extends Controller
             return response()->json(['message' => 'New Book Request not found'], 404); // Handle not found cases
         }
         $newBookRequest->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

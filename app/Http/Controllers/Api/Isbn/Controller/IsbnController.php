@@ -31,7 +31,7 @@ class IsbnController extends Controller
         $total = $query->count();
 
         // Apply Pagination
-        $isbn= PaginationHelper::applyPagination(
+        $isbn = PaginationHelper::applyPagination(
             $query->paginate($perPage)->items(),
             $perPage,
             $request->input('page', 1), // Default to page 1
@@ -43,13 +43,13 @@ class IsbnController extends Controller
         //     $bookPurchase->CoverImageForeign;
         // }
 
-        return response()->json([[
+        return response()->json([
             'data' => $isbn,
             'total' => $isbn->total(),
             'per_page' => $isbn->perPage(),
             'current_page' => $isbn->currentPage(),
             'last_page' => $isbn->lastPage(),
-        ], 200]);
+        ], 200);
 
         // Return the data as a JSON response
 
@@ -61,14 +61,14 @@ class IsbnController extends Controller
     {
         // Post request
         $request->validate([
-            'isbn'=>'required|string',
+            'isbn' => 'required|string',
         ]);
 
         $isbn = Isbn::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'Isbn' => $isbn // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getIsbn(string $isbn_id)
@@ -76,7 +76,7 @@ class IsbnController extends Controller
         // Find the specific resource
         $isbn = Isbn::find($isbn_id); // Use the correct model name
         if (!$isbn) {
-            return response()->json([['message' => 'Isbn number not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Isbn number not found'], 404); // Handle not found cases
         }
         return $isbn;
     }
@@ -86,7 +86,7 @@ class IsbnController extends Controller
         // Update the resource
         $isbn = Isbn::find($isbn_id); // Use the correct model name
         if (!$isbn) {
-            return response()->json([['message' => 'Publisher not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
         $isbn->update($request->all());
         return response()->json([
@@ -100,11 +100,11 @@ class IsbnController extends Controller
         // Delete the resource
         $isbn = Isbn::find($isbn_id); // Use the correct model name
         if (!$isbn) {
-            return response()->json([['message' => 'Isbn number not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Isbn number not found'], 404); // Handle not found cases
         }
         $isbn->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

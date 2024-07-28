@@ -43,13 +43,13 @@ class BarcodeController extends Controller
         //     $bookPurchase->CoverImageForeign;
         // }
 
-        return response()->json([[
+        return response()->json([
             'data' => $barcode,
             'total' => $barcode->total(),
             'per_page' => $barcode->perPage(),
             'current_page' => $barcode->currentPage(),
             'last_page' => $barcode->lastPage(),
-        ], 200]);
+        ], 200);
 
         // Return the data as a JSON response
 
@@ -66,10 +66,10 @@ class BarcodeController extends Controller
         ]);
 
         $barcode = Barcode::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'barcode data' => $barcode // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getBarcode(string $barcode_id)
@@ -80,7 +80,7 @@ class BarcodeController extends Controller
             return response()->json(['message' => 'barcode not found'], 404); // Handle not found cases
         }
         $barcode->bookPurchaseForeign;  // Get the foreign key data i.e-> CoverImageForeign from the Model instance function
-        return response()->json([($barcode)->jsonSerialize(), 200]);
+        return response()->json(($barcode)->jsonSerialize(), 200);
     }
 
     public function updateBarcode(Request $request, string $barcode_id)
@@ -88,7 +88,7 @@ class BarcodeController extends Controller
         // Update the resource
         $barcode = Barcode::find($barcode_id); // Use the correct model name
         if (!$barcode) {
-            return response()->json([['message' => 'Barcode not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Barcode not found'], 404); // Handle not found cases
         }
         $barcode->update($request->all());
         return response()->json([[
@@ -105,8 +105,8 @@ class BarcodeController extends Controller
             return response()->json([['message' => 'Barcode not found'], 404]); // Handle not found cases
         }
         $barcode->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

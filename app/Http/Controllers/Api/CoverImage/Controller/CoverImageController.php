@@ -40,13 +40,13 @@ class CoverImageController extends Controller
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $coverImage->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $coverImage->currentPage(),
             'last_page' => $coverImage->lastPage(),
-        ]]);
+        ], 200);
     }
 
     public function postCoverImage(Request $request)
@@ -57,10 +57,10 @@ class CoverImageController extends Controller
         ]);
 
         $coverImage = CoverImage::create($request->all()); // Create a new CoverImage instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created ',
             'coverImage' => $coverImage // Return the created coverImage 
-        ], 201]);
+        ], 201);
     }
 
     public function getCoverImage(string $image_id)
@@ -68,7 +68,7 @@ class CoverImageController extends Controller
         // Find the specific resource
         $coverImage = CoverImage::find($image_id); // Use the correct model name
         if (!$coverImage) {
-            return response()->json([['message' => 'cover image not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'cover image not found'], 404); // Handle not found cases
         }
         return $coverImage;
     }
@@ -78,13 +78,13 @@ class CoverImageController extends Controller
         // Update the resource
         $coverImage = CoverImage::find($image_id); // Use the correct model name
         if (!$coverImage) {
-            return response()->json([['message' => 'cover Image not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'cover Image not found'], 404); // Handle not found cases
         }
         $coverImage->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'publisher' => $coverImage // Return the updated publisher data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyCoverImage(string $image_id)
@@ -95,8 +95,8 @@ class CoverImageController extends Controller
             return response()->json([['message' => 'Cover Image not found'], 404]); // Handle not found cases
         }
         $coverImage->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]); // Success
+        ], 200); // Success
     }
 }

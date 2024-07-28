@@ -40,13 +40,13 @@ class NotificationController extends Controller
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $notification->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $notification->currentPage(),
             'last_page' => $notification->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -60,10 +60,10 @@ class NotificationController extends Controller
         ]);
 
         $notification = Notification::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'publisher' => $notification // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getNotification(string $notification_id)
@@ -71,7 +71,7 @@ class NotificationController extends Controller
         // Find the specific resource
         $notification = Notification::find($notification_id); // Use the correct model name
         if (!$notification) {
-            return response()->json([['message' => 'Publisher not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
         return response()->json(($notification));
     }
@@ -84,10 +84,10 @@ class NotificationController extends Controller
             return response()->json(['message' => 'Notification not found'], 404); // Handle not found cases
         }
         $notification->updateNotification($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'publisher' => $notification // Return the updated publisher data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyNotification(string $notification_id)
@@ -95,11 +95,11 @@ class NotificationController extends Controller
         // Delete the resource
         $notification = Notification::find($notification_id); // Use the correct model name
         if (!$notification) {
-            return response()->json([['message' => 'Notification not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Notification not found'], 404); // Handle not found cases
         }
         $notification->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

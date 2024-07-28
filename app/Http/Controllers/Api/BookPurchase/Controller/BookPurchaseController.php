@@ -92,10 +92,10 @@ class BookPurchaseController extends Controller
         ]);
 
         $bookPurchase = BookPurchase::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created book purchase',
             'bookPurchase' => $bookPurchase->jsonSerialize() // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getBookPurchase(string $purchase_id)
@@ -103,7 +103,7 @@ class BookPurchaseController extends Controller
         // Find the specific resource
         $bookPurchase = BookPurchase::find($purchase_id); // Use the correct model name
         if (!$bookPurchase) {
-            return response()->json([['message' => 'Book Purchased not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Book Purchased not found'], 404); // Handle not found cases
         }
         $bookPurchase->coverImageForeign;  // Get the foreign key data i.e-> CoverImageForeign from the Model instance function
         $bookPurchase->bookOnlineForeign; // Get the foreign key data
@@ -112,7 +112,7 @@ class BookPurchaseController extends Controller
         $bookPurchase->categoryForeign; // Get the foreign key data
         $bookPurchase->publisherForeign; // Get the foreign key data
         $bookPurchase->isbnForeign; // Get the foreign key data
-        return response()->json([($bookPurchase)->jsonSerialize(), 200]);
+        return response()->json($bookPurchase, 200);
     }
 
     public function updateBookPurchase(Request $request, string $purchase_id)
@@ -120,13 +120,13 @@ class BookPurchaseController extends Controller
         // Update the resource
         $bookPurchase = BookPurchase::find($purchase_id); // Use the correct model name
         if (!$bookPurchase) {
-            return response()->json([['message' => 'Book Purchased not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Book Purchased not found'], 404); // Handle not found cases
         }
         $bookPurchase->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'publisher' => $bookPurchase->jsonSerialize() // Return the updated publisher data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyBookPurchase(string $purchase_id)
@@ -134,12 +134,12 @@ class BookPurchaseController extends Controller
         // Delete the resource
         $bookPurchase = BookPurchase::find($purchase_id); // Use the correct model name
         if (!$bookPurchase) {
-            return response()->json([['message' => 'Purchased Book  not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Purchased Book  not found'], 404); // Handle not found cases
         }
 
 
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted '
-        ], 200]);
+        ], 200);
     }
 }

@@ -53,13 +53,13 @@ class BookController extends Controller
             $total
         );
 
-        return response()->json([[
+        return response()->json([
             'data' => $paginatedResult->items(),
             'total' => $paginatedResult->total(),
             'per_page' => $paginatedResult->perPage(),
             'current_page' => $paginatedResult->currentPage(),
             'last_page' => $paginatedResult->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
     public function postBook(Request $request)
@@ -71,10 +71,10 @@ class BookController extends Controller
         ]);
 
         $book = Book::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'book' => $book // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getBook(string $book_id)
@@ -126,7 +126,7 @@ class BookController extends Controller
         }
 
         // Return the book purchases along with their relationships
-        return response()->json([$bookPurchases, 200]);
+        return response()->json($bookPurchases, 200);
     }
 
 

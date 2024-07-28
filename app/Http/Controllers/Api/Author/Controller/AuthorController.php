@@ -42,13 +42,13 @@ class AuthorController extends Controller
         // $Author = $query->simplePaginate(10);// Use the correct model name
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $author,
             'total' => $author->total(),
             'per_page' => $author->perPage(),
             'current_page' => $author->currentPage(),
             'last_page' => $author->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
     public function postAuthor(Request $request)
@@ -84,13 +84,13 @@ class AuthorController extends Controller
         // Update the resource
         $author = Author::find($author_id); // Use the correct model name
         if (!$author) {
-            return response()->json([['message' => 'Author not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Author not found'], 404); // Handle not found cases
         }
         $author->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'author' => $author // Return the updated author data
-        ], 200]);
+        ], 200);
     }
 
 

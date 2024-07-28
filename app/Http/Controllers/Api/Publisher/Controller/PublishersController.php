@@ -39,13 +39,13 @@ class PublishersController extends Controller
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $publishers->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $publishers->currentPage(),
             'last_page' => $publishers->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -58,10 +58,10 @@ class PublishersController extends Controller
         ]);
 
         $publisher = Publishers::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'publisher' => $publisher // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getPublisher(string $publisher_id)
@@ -69,12 +69,15 @@ class PublishersController extends Controller
         // Find the specific resource
         $publisher = Publishers::find($publisher_id); // Use the correct model name
         if (!$publisher) {
-            return response()->json([['message' => 'Publisher not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
-        return response()->json([
-            'message'=>"Publisher Found",
-            'publisher' => $publisher,
-            200]);
+        return response()->json(
+            [
+                'message' => "Publisher Found",
+                'publisher' => $publisher
+            ],
+            200
+        );
     }
 
     public function updatePublisher(Request $request, string $publisher_id)
@@ -82,13 +85,13 @@ class PublishersController extends Controller
         // Update the resource
         $publisher = Publishers::find($publisher_id); // Use the correct model name
         if (!$publisher) {
-            return response()->json([['message' => 'Publisher not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
         $publisher->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'publisher' => $publisher // Return the updated publisher data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyPublisher(string $publisher_id)
@@ -96,11 +99,11 @@ class PublishersController extends Controller
         // Delete the resource
         $publisher = Publishers::find($publisher_id); // Use the correct model name
         if (!$publisher) {
-            return response()->json([['message' => 'Publisher not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
         $publisher->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

@@ -53,13 +53,13 @@ class MembershipController extends Controller
             $total
         );
 
-        return response()->json([[
+        return response()->json([
             'data' => $paginatedResult->items(),
             'total' => $paginatedResult->total(),
             'per_page' => $paginatedResult->perPage(),
             'current_page' => $paginatedResult->currentPage(),
             'last_page' => $paginatedResult->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -76,10 +76,10 @@ class MembershipController extends Controller
         ]);
 
         $membership = Membership::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'membership data' => $membership // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getMembership(string $membership_id)
@@ -87,7 +87,7 @@ class MembershipController extends Controller
         // Find the specific resource
         $membership = Membership::find($membership_id); // Use the correct model name
         if (!$membership) {
-            return response()->json([['message' => 'Membership not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Membership not found'], 404); // Handle not found cases
         }
         $membership->memberForeign;        // Get the foreign key data
         $membership->employeeForeign;
@@ -115,13 +115,13 @@ class MembershipController extends Controller
         // Update the resource
         $membership = Membership::find($membership_id); // Use the correct model name
         if (!$membership) {
-            return response()->json([['message' => 'Membership  not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Membership  not found'], 404); // Handle not found cases
         }
         $membership->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'membership ' => $membership // Return the updated publisher data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyMembership(string $membership_id)
@@ -129,11 +129,11 @@ class MembershipController extends Controller
         // Delete the resource
         $membership = Membership::find($membership_id); // Use the correct model name
         if (!$membership) {
-            return response()->json([['message' => 'Membership not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Membership not found'], 404); // Handle not found cases
         }
         $membership->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }
