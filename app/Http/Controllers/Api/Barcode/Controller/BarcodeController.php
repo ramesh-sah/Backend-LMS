@@ -91,10 +91,10 @@ class BarcodeController extends Controller
             return response()->json(['message' => 'Barcode not found'], 404); // Handle not found cases
         }
         $barcode->update($request->all());
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'publisher' => $barcode // Return the updated barcode data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyBarcode(string $barcode_id)
@@ -102,7 +102,7 @@ class BarcodeController extends Controller
         // Delete the resource
         $barcode = Barcode::find($barcode_id); // Use the correct model name
         if (!$barcode) {
-            return response()->json([['message' => 'Barcode not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Barcode not found'], 404); // Handle not found cases
         }
         $barcode->delete();
         return response()->json([

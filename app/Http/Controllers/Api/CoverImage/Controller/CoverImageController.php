@@ -92,7 +92,7 @@ class CoverImageController extends Controller
         // Delete the resource
         $coverImage = CoverImage::find($image_id); // Use the correct model name
         if (!$coverImage) {
-            return response()->json([['message' => 'Cover Image not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Cover Image not found'], 404); // Handle not found cases
         }
         $coverImage->delete();
         return response()->json([

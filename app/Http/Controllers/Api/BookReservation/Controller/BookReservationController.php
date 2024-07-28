@@ -78,10 +78,10 @@ class BookReservationController extends Controller
 
 
         $reservation = BookReservation::create($request->all()); // Create a new Book Reservation instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'reservation' => $reservation // Return the created book reservation data
-        ], 201]);
+        ], 201);
     }
 
     public function getBookReservation(string $reservation_id)
