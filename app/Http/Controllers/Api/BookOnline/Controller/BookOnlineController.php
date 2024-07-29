@@ -43,13 +43,13 @@ class BookOnlineController extends Controller
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $bookOnline->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $bookOnline->currentPage(),
             'last_page' => $bookOnline->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 

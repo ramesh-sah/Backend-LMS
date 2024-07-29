@@ -70,10 +70,10 @@ class DamagedBookController extends Controller
         ]);
 
         $damagedBook = DamagedBook::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'damaged book' => $damagedBook // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
     public function getDamagedBook(string $damaged_book_id)
     {
@@ -87,7 +87,7 @@ class DamagedBookController extends Controller
         }
 
         // Return the book along with its relationships
-        return response()->json([$damagedBook, 200]);
+        return response()->json($damagedBook, 200);
     }
 
 

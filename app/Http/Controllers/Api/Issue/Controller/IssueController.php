@@ -52,13 +52,13 @@ class IssueController extends Controller
             $total
         );
 
-        return response()->json([[
+        return response()->json([
             'data' => $paginatedResult->items(),
             'total' => $paginatedResult->total(),
             'per_page' => $paginatedResult->perPage(),
             'current_page' => $paginatedResult->currentPage(),
             'last_page' => $paginatedResult->lastPage(),
-        ], 200]);
+        ], 200);
     }
     public function postIssue(Request $request)
     {

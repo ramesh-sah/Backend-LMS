@@ -45,13 +45,13 @@ class BookReservationController extends Controller
         );
 
         // Return the data as a JSON response
-        return response()->json([[
+        return response()->json([
             'data' => $bookReservation->toArray(),
             'total' => $total,
             'per_page' => $perPage,
             'current_page' => $bookReservation->currentPage(),
             'last_page' => $bookReservation->lastPage(),
-        ], 200]);
+        ], 200);
     }
 
 
@@ -78,10 +78,10 @@ class BookReservationController extends Controller
 
 
         $reservation = BookReservation::create($request->all()); // Create a new Book Reservation instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'reservation' => $reservation // Return the created book reservation data
-        ], 201]);
+        ], 201);
     }
 
     public function getBookReservation(string $reservation_id)
@@ -102,29 +102,29 @@ class BookReservationController extends Controller
         }
 
         // Return the book along with its relationships
-        return response()->json([$bookReservation, 200]);
+        return response()->json($bookReservation, 200);
     }
 
     public function getSpecificUserAllBookReservation(string $member_id)
     {
         // Find the specific resource with eager loading of relationships
         $bookReservation = BookReservation::where('member_id', $member_id)
-        ->with([
-            'bookForeign.bookPurchaseForeign.coverImageForeign',
-            'bookForeign.bookPurchaseForeign.bookOnlineForeign',
-            'bookForeign.bookPurchaseForeign.barcodeForeign',
-            'bookForeign.bookPurchaseForeign.authorForeign',
-            'bookForeign.bookPurchaseForeign.categoryForeign',
-            'bookForeign.bookPurchaseForeign.publisherForeign',
-            'bookForeign.bookPurchaseForeign.isbnForeign'
-        ])->get();
+            ->with([
+                'bookForeign.bookPurchaseForeign.coverImageForeign',
+                'bookForeign.bookPurchaseForeign.bookOnlineForeign',
+                'bookForeign.bookPurchaseForeign.barcodeForeign',
+                'bookForeign.bookPurchaseForeign.authorForeign',
+                'bookForeign.bookPurchaseForeign.categoryForeign',
+                'bookForeign.bookPurchaseForeign.publisherForeign',
+                'bookForeign.bookPurchaseForeign.isbnForeign'
+            ])->get();
 
         if ($bookReservation->isEmpty()) {
             return response()->json(['message' => 'No reservations found'], 404);
         }
 
         // Return the book along with its relationships
-        return response()->json([$bookReservation, 200]);
+        return response()->json($bookReservation, 200);
     }
     public function updateBookReservation(Request $request, string $reservation_id)
     {
@@ -133,7 +133,7 @@ class BookReservationController extends Controller
         if (!$bookReservation) {
             return response()->json(['message' => 'Book Reservation not found'], 404); // Handle not found cases
         }
-        
+
         $bookReservation->update($request->all());
         $book = Book::find($bookReservation->book_id); // Assuming you have book_id in BookReservation
         if ($book) {
@@ -141,10 +141,10 @@ class BookReservationController extends Controller
 
             $book->save(); // Save to persist the status change in the database
         }
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully updated',
             'reservation' => $bookReservation // Return the updated book reservation data
-        ], 200]);
+        ], 200);
     }
 
     public function destroyBookReservation(string $reservation_id)
@@ -155,8 +155,8 @@ class BookReservationController extends Controller
             return response()->json(['message' => 'Book Reservation not found'], 404); // Handle not found cases
         }
         $bookReservation->delete();
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully deleted'
-        ], 200]);
+        ], 200);
     }
 }

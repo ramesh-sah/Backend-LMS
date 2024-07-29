@@ -45,13 +45,13 @@ class MembersNotificationController extends Controller
         //     $bookPurchase->CoverImageForeign;
         // }
 
-        return response()->json([[
+        return response()->json([
             'data' => $membersNotification,
             'total' => $membersNotification->total(),
             'per_page' => $membersNotification->perPage(),
             'current_page' => $membersNotification->currentPage(),
             'last_page' => $membersNotification->lastPage(),
-        ], 200]);
+        ], 200);
 
         // Return the data as a JSON response
 
@@ -68,10 +68,10 @@ class MembersNotificationController extends Controller
         ]);
 
         $membersNotification = MembersNotification::create($request->all()); // Create a new Publisher instance
-        return response()->json([[
+        return response()->json([
             'message' => 'Successfully created',
             'memebersNotification' => $membersNotification // Return the created publisher data
-        ], 201]);
+        ], 201);
     }
 
     public function getMembersNotification(string $member_notification_id)
@@ -79,11 +79,11 @@ class MembersNotificationController extends Controller
         // Find the specific resource
         $membersNotification = MembersNotification::find($member_notification_id); // Use the correct model name
         if (!$membersNotification) {
-            return response()->json([['message' => 'memeber not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'memeber not found'], 404); // Handle not found cases
         }
         $membersNotification->memberForeign;
         $membersNotification->notificationForeign;
-        return response()->json([($membersNotification)->jsonSerialize(), 200]);
+        return response()->json(($membersNotification)->jsonSerialize(), 200);
     }
 
     public function updateMembersNotification(Request $request, string $member_notification_id)
@@ -105,7 +105,7 @@ class MembersNotificationController extends Controller
         // Delete the resource
         $membersNotification = MembersNotification::find($member_notification_id); // Use the correct model name
         if (!$membersNotification) {
-            return response()->json([['message' => 'Publisher not found'], 404]); // Handle not found cases
+            return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
         $membersNotification->delete();
         return response()->json([

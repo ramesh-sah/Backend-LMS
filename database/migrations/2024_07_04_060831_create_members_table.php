@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('enrollment_year', 4);
             $table->enum('role', ['staff', 'student'])->default('student');
             $table->date('account_creation_date')->default(now());
-            $table->enum('account_status', ['active', 'inactive', 'suspended'])->default('active');
+            $table->enum('account_status', ['pending', 'active', 'inactive', 'suspended', 'deleted'])->default('pending');
             $table->string('image_link', 2048)->nullable();
             $table->timestamps();
             $table->softDeletes();
