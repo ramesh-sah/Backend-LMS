@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('membership_id');
             $table->foreign('membership_id')->references('membership_id')->on('memberships')->onDelete('cascade');
-            $table->string('reservation_id');
+            $table->string('reservation_id')->nullable();
             $table->foreign('reservation_id')->references('reservation_id')->on('book_reservations')->onDelete('cascade');
             $table->string('book_id')->nullable();
             $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
