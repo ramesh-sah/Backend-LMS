@@ -16,6 +16,7 @@ class CategoryController extends Controller
     {
         return Category::All();
     }
+
     public function postCategory(Request $request)
     {
         // Post request

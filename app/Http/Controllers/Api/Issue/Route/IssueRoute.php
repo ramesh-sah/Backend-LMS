@@ -22,7 +22,6 @@ Route::prefix('/employee/issue')->middleware(['auth:employee'])->group(function 
     Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
 });
 
-
 Route::prefix('/member/issue')->middleware(['auth:member'])->group(function () {
     Route::get('/getUserAllIssue/{member_id}', [IssueController::class, 'getSpecificUserAllIssue']);
     Route::get('/{issue_id}', [IssueController::class, 'getIssue']);

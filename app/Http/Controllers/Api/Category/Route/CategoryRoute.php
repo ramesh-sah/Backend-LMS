@@ -22,3 +22,7 @@ Route::prefix('/employee/category')->middleware(['auth:employee'])->group(functi
     Route::put('/{category_id}', [CategoryController::class, 'updateCategory']);
     Route::delete('/{category_id}', [CategoryController::class, 'destroyCategory']);
 });
+
+Route::prefix('/member/category')->middleware(['auth:member'])->group(function () {
+    Route::get('/getAllCategory', [CategoryController::class, 'getAllCategory']);
+});

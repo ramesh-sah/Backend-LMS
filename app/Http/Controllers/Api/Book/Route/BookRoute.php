@@ -26,6 +26,4 @@ Route::prefix('/member/book')->middleware(['auth:member'])->group(function () {
     Route::get('/getAllBook', [BookController::class, 'getAllBook']);
     Route::get('/{book_id}', [BookController::class, 'getBook']);
     Route::get('/category/{category_id}', [BookController::class, 'getBookByCategory']);
-   
 });
-

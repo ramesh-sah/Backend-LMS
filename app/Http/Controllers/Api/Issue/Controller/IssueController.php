@@ -117,16 +117,16 @@ class IssueController extends Controller
         if (!$issue) {
             return response()->json(['message' => 'Issue not found'], 404); // Handle not found cases
         }
-        return response()->json([$issue]);
+        return response()->json($issue);
     }
 
-    public function getSpecificUserAllIssue(Request $request ,string $member_id )
+    public function getSpecificUserAllIssue(Request $request, string $member_id)
     {
         $sortBy = $request->input('sort_by'); // sort_by params 
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
-    
-    
+
+
         // Find the specific resource with eager loading of relationships
         $bookIssue = Issue::where('member_id', $member_id)
             ->with('memberForeign', 'employeeForeign', 'membershipForeign', 'reservationForeign', 'bookForeign', 'bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookForeign.bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign')->get();
@@ -135,14 +135,14 @@ class IssueController extends Controller
             return response()->json(['message' => 'No issue found'], 404);
         }
         // Apply Sorting
-        $bookIssue= SortHelper::applySorting($bookIssue, $sortBy, $sortOrder);
+        $bookIssue = SortHelper::applySorting($bookIssue, $sortBy, $sortOrder);
 
         // Apply Filtering
         $bookIssue = FilterHelper::applyFiltering($bookIssue, $filters);
 
-      
+
         // Return the book along with its relationships
-        return response()->json([$bookIssue]);
+        return response()->json($bookIssue);
     }
 
     public function updateIssue(Request $request, string $issue_id)
