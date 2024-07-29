@@ -147,6 +147,30 @@ class IssueController extends Controller
             'issue' => $issue // Return the updated issue data
         ]);
     }
+    public function issueBookRenew(Request $request, string $issue_id)
+    {
+        $request->validate([
+            'due_date' => now()->addDays(14),
+            'renewal_request_date' => 'required|date',
+            'renewal_count' => 'required|numeric',
+
+
+        ]);
+
+
+        // Update the resource
+        $issue = Issue::find($issue_id); // Use the correct model name
+        if (!$issue) {
+            return response()->json(['message' => 'Issue not found']); // Handle not found cases
+        }
+        $issue->updateIssue($request->all());
+        return response()->json([
+            'message' => 'Successfully updated',
+            'issue' => $issue // Return the updated issue data
+        ]);
+    }
+
+
 
     public function destroyIssue(string $issue_id)
     {
