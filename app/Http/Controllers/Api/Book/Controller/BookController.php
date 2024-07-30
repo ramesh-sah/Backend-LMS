@@ -203,13 +203,13 @@ class BookController extends Controller
             'publication_place' => 'required|string',
             //isbn table validation
             'isbn' => 'required|string',
-            'image_id' => 'required|exists:cover_images,image_id',
-            'online_id' => 'exists:book_onlines,online_id',
-            'barcode_id' => 'required|exists:barcodes,barcode_id',
-            'author_id' => 'required|exists:authors,author_id',
-            'category_id' => 'required|exists:categories,category_id',
-            'publisher_id' => 'required|exists:publishers,publisher_id',
-            'isbn_id' => 'required|exists:isbns,isbn_id',
+            // 'image_id' => 'required|exists:cover_images,image_id',
+            // 'online_id' => 'exists:book_onlines,online_id',
+            // 'barcode_id' => 'required|exists:barcodes,barcode_id',
+            // 'author_id' => 'required|exists:authors,author_id',
+            // 'category_id' => 'required|exists:categories,category_id',
+            // 'publisher_id' => 'required|exists:publishers,publisher_id',
+            // 'isbn_id' => 'required|exists:isbns,isbn_id',
 
 
         ]);
