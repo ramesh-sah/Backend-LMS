@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('damaged_books', function (Blueprint $table) {
             $table->uuid('damaged_book_id')->primary();
             $table->string('book_id');
-            $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
+            $table->foreign('book_id')->references('book_id')->on('books');
             $table->date('damaged_on')->default(now());
             $table->timestamps();
             $table->softDeletes();

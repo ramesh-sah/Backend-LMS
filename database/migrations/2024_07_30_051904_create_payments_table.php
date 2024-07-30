@@ -16,15 +16,15 @@ return new class extends Migration
             $table->date('payment_date')->default(now());
             $table->integer('paid_amount');
             $table->string('member_id');
-            $table->foreign('member_id')->references('member_id')->on('members')->onDelete('cascade');
+            $table->foreign('member_id')->references('member_id')->on('members');
             $table->string('employee_id')->nullable();
-            $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
+            $table->foreign('employee_id')->references('employee_id')->on('employees');
             $table->string('book_id')->nullable();
-            $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
+            $table->foreign('book_id')->references('book_id')->on('books');
             $table->string('issue_id')->nullable();
-            $table->foreign('issue_id')->references('issue_id')->on('issues')->onDelete('cascade');
+            $table->foreign('issue_id')->references('issue_id')->on('issues');
             $table->string('due_id')->nullable();
-            $table->foreign('due_id')->references('due_id')->on('dues')->onDelete('cascade');
+            $table->foreign('due_id')->references('due_id')->on('dues');
 
             $table->timestamps();
             $table->softDeletes();

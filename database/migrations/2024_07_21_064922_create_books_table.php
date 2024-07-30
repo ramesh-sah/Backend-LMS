@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('added_date')->default(now());
             $table->enum('book_status', ['available', 'reserved', 'issued'])->default('available');
             $table->string('purchase_id');
-            $table->foreign('purchase_id')->references('purchase_id')->on('book_purchases')->onDelete('cascade');
+            $table->foreign('purchase_id')->references('purchase_id')->on('book_purchases');
 
 
             // $table->string('image_id');

@@ -12,7 +12,7 @@ class PaymentController extends Controller
     {
         // Fetch all the Payment objects
         return Payment::all();
-        // $payments = $query->simplePaginate(10);// Use the correct model name
+
     }
 
     public function store(Request $request)

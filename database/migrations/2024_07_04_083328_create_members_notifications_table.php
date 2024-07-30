@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('members_notifications', function (Blueprint $table) {
             $table->uuid('member_notification_id')->primary();
             $table->string('member_id');
-            $table->foreign('member_id')->references('member_id')->on('members')->onDelete('cascade');
+            $table->foreign('member_id')->references('member_id')->on('members');
             $table->string('notification_id');
-            $table->foreign('notification_id')->references('notification_id')->on('notifications')->onDelete('cascade');
+            $table->foreign('notification_id')->references('notification_id')->on('notifications');
             $table->boolean('isRead')->default(false);
             $table->timestamps();
             $table->softDeletes(); 
