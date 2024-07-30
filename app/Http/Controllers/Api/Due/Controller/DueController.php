@@ -20,70 +20,48 @@ class DueController extends Controller
         return response($sum, 200);
     }
 
-    // public function getDueOfMember(Request $request)
-    // {
-    //     $sortBy = $request->input('sort_by'); // sort_by params 
-    //     $sortOrder = $request->input('sort_order'); // sort_order params
-    //     $filters = $request->input('filters'); // filter params
-    //     $perPage = $request->input('per_page', 10); // Default to 10 items per page
-    //     $currentPage = $request->input('page', 1); // Default to page 1
-
-    //     $query = Due::query();
-
-    //     // Apply Sorting
-    //     $query = SortHelper::applySorting($query, $sortBy, $sortOrder);
-
-    //     // Apply Filtering
-    //     $query = FilterHelper::applyFiltering($query, $filters);
-
-    //     // Get Total Count for Pagination
-    //     $total = $query->count();
-
-    //     // Get the paginated result
-    //     $due = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
-
-    //     // Apply Pagination
-    //     $due = PaginationHelper::applyPagination(
-    //         $due,
-    //         $perPage,
-    //         $request->input('page', 1), // Default to page 1
-    //         $currentPage,
-    //         $total,
-    //     );
-
-    //     // Return the data as a JSON response
-    //     return response()->json([
-    //         'data' => $due->toArray(),
-    //         'total' => $total,
-    //         'per_page' => $perPage,
-    //         'current_page' => $due->currentPage(),
-    //         'last_page' => $due->lastPage(),
-    //     ], 200);
-    // }
-
-
     public function getDueOfMember(Request $request, string $member_id)
     {
         $sortBy = $request->input('sort_by'); // sort_by params 
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
+        $perPage = $request->input('per_page', 10); // Default to 10 items per page
+        $currentPage = $request->input('page', 1); // Default to page 1
 
-
-        // Find the specific resource with eager loading of relationships
-        $dues = Due::where('member_id', $member_id)->get(); // Use the correct model name
-
-        if ($dues->isEmpty()) {
-            return response()->json(['message' => 'No issue found'], 404);
-        }
+        $query = Due::query()
+            ->leftJoin('payments', 'dues.due_id', '=', 'payments.due_id')
+            ->select('dues.*', 'payments.payment_id', 'payments.payment_date', 'payments.paid_amount')
+            ->where('dues.member_id', $member_id);
 
         // Apply Sorting
-        $dues = SortHelper::applySorting($dues, $sortBy, $sortOrder);
+        $query = SortHelper::applySorting($query, $sortBy, $sortOrder);
 
-        // // Apply Filtering
-        $dues = FilterHelper::applyFiltering($dues, $filters);
+        // Apply Filtering
+        $query = FilterHelper::applyFiltering($query, $filters);
 
-        // Return the book along with its relationships
-        return response(["data" => $dues], 200);
+        // Get Total Count for Pagination
+        $total = $query->count();
+
+        // Get the paginated result
+        $due = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+
+        // Apply Pagination
+        $due = PaginationHelper::applyPagination(
+            $due,
+            $perPage,
+            $request->input('page', 1), // Default to page 1
+            $currentPage,
+            $total,
+        );
+
+        // Return the data as a JSON response
+        return response()->json([
+            'data' => $due->toArray(),
+            'total' => $total,
+            'per_page' => $perPage,
+            'current_page' => $due->currentPage(),
+            'last_page' => $due->lastPage(),
+        ], 200);
     }
 
     public function index()
