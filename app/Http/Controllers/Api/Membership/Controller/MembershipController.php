@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api\Membership\Controller;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Membership\Model\Membership;
 use Illuminate\Http\Request;
-
-
 use App\Http\Controllers\Helpers\Sort\SortHelper;
 use App\Http\Controllers\Helpers\Filters\FilterHelper;
 use App\Http\Controllers\Helpers\Pagination\PaginationHelper;
@@ -31,10 +29,6 @@ class MembershipController extends Controller
 
         // Get Total Count for Pagination
         $total = $query->count();
-
-        // Eager load relationships
-
-
 
         // Get the paginated result
         $membership = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
@@ -71,14 +65,12 @@ class MembershipController extends Controller
             'member_id' => 'exists:members,member_id',
             'employee_id' => 'exists:employees,employee_id',
             'expiry_date' => 'date'
-
-
         ]);
 
         $membership = Membership::create($request->all()); // Create a new Publisher instance
         return response()->json([
             'message' => 'Successfully created',
-            'membership data' => $membership // Return the created publisher data
+            'membershipData' => $membership // Return the created publisher data
         ], 201);
     }
 
@@ -106,7 +98,7 @@ class MembershipController extends Controller
         // Assuming you have defined relationships `memberForeign` and `employeeForeign` in your Membership model
         $membership->load('memberForeign', 'employeeForeign'); // Eager load the foreign key relationships
 
-        return response()->json($membership);
+        return response()->json($membership, 200);
     }
 
 
