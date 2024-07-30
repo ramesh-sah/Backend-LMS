@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Issue\Controller;
 
 use App\Http\Controllers\Api\Book\Model\Book;
 use App\Http\Controllers\Api\BookReservation\Model\BookReservation;
+use App\Http\Controllers\Api\Dues\Model\Dues ;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Issue\Model\Issue;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Helpers\Sort\SortHelper;
 use App\Http\Controllers\Helpers\Filters\FilterHelper;
 use App\Http\Controllers\Helpers\Pagination\PaginationHelper;
+use Carbon\Carbon;
 
 class IssueController extends Controller
 {
@@ -40,13 +42,13 @@ class IssueController extends Controller
 
 
         // Get the paginated result
-        $membership = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+        $issue = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
 
         // Retrieve foreign key data
 
         // Apply Pagination Helper
         $paginatedResult = PaginationHelper::applyPagination(
-            $membership,
+            $issue,
             $perPage,
             $currentPage,
             $total
@@ -65,7 +67,6 @@ class IssueController extends Controller
         // Post request
         $request->validate([
             'due_date' => now()->addDays(14),
-            'check_in_date' => now(),
             'member_id' => 'required|exists:members,member_id',
             'book_id' => 'required|exists:books,book_id',
             'employee_id' => 'required|exists:employees,employee_id',
@@ -81,12 +82,12 @@ class IssueController extends Controller
             ], 400);
         }
 
-        $book = Book::find($request->book_id);
-        if ($book->book_status !== 'available') {
-            return response()->json([
-                'message' => 'Book is not available',
-            ], 400);
-        }
+        // $book = Book::find($request->book_id);
+        // if ($book->book_status !== 'available') {
+        //     return response()->json([
+        //         'message' => 'Book is not available',
+        //     ], 400);
+        // }
 
         // Check if a reservation exists and update its status
         if ($request->reservation_id) {
@@ -102,9 +103,25 @@ class IssueController extends Controller
         $book->save();
 
         $issue = Issue::create($request->all()); // Create a new Issue instance
+
+        // Create the Dues record associated with the Issue
+        $due = new Dues([
+            'description' => ' Fine Fees',
+            'due_status' => 'pending',
+            'member_id' => $issue->member_id,
+            'employee_id' => $issue->employee_id,
+            'book_id' => $issue->book_id,
+            'issue_id' => $issue->issue_id,
+            'due_date'=>$issue->due_date
+        ]);
+
+        // Save the Dues record
+        $issue->dues()->save($due);
+
         return response()->json([
             'message' => 'Successfully created',
-            'issue' => $issue // Return the created issue data
+            'issue' => $issue, // Return the created issue data
+            'dues' => $due // Return the created dues data
         ]);
     }
 
@@ -163,22 +180,38 @@ class IssueController extends Controller
         $request->validate([
             'due_date' => now()->addDays(14),
             'renewal_request_date' => 'required|date',
-            'renewal_count' => 'required|numeric',
+            'renewal_count' => 'required',
 
 
         ]);
 
-
-        // Update the resource
-        $issue = Issue::find($issue_id); // Use the correct model name
+        // Find the issue
+        $issue = Issue::find($issue_id);
         if (!$issue) {
-            return response()->json(['message' => 'Issue not found']); // Handle not found cases
+            return response()->json(['message' => 'Issue not found'], 404);
         }
-        $issue->updateIssue($request->all());
+
+        // Update renewal_count based on its current value
+        $currentRenewalCount = $issue->renewal_count;
+        $newRenewalCount = match ($currentRenewalCount) {
+            'none' => 'first',
+            'first' => 'second',
+            'second' => 'third',
+            default => $currentRenewalCount, // Keep the same if not in the enum
+        };
+
+        // Update the issue
+        $issue->update([
+            'due_date' => Carbon::now()->addDays(14), // Set due_date 14 days from now
+            'renewal_request_date' => Carbon::now(), // Set renewal_request_date to current timestamp
+            'renewal_count' => $newRenewalCount,
+        ]);
+
         return response()->json([
             'message' => 'Successfully updated',
-            'issue' => $issue // Return the updated issue data
+            'issue' => $issue,
         ]);
+    
     }
 
 

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('dues', function (Blueprint $table) {
             $table->uuid('due_id')->primary();
+            $table->date('due_date');
             $table->string('description', 400);
-            $table->string('amount', 5);
+            $table->float('amount', 3)->default(0);
             $table->enum('due_status', ['cleared',  'pending'])->default('pending');
             $table->string('member_id');
             $table->foreign('member_id')->references('member_id')->on('members')->onDelete('cascade');

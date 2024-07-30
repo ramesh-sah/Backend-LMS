@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('due_date')->default(now()->addDays(14));
             $table->date('check_in_date')->nullable();
             $table->date('renewal_request_date')->nullable();
-            $table->integer('renewal_count', 3)->nullable();
+            $table->enum('renewal_count', ['none', 'first', 'second', 'third'])->default('none');
             $table->string('member_id');
             $table->foreign('member_id')->references('member_id')->on('members')->onDelete('cascade');
             $table->string('employee_id');

@@ -26,4 +26,6 @@ Route::prefix('/employee/issue')->middleware(['auth:employee'])->group(function 
 Route::prefix('/member/issue')->middleware(['auth:member'])->group(function () {
     Route::get('/getUserAllIssue/{member_id}', [IssueController::class, 'getSpecificUserAllIssue']);
     Route::get('/{issue_id}', [IssueController::class, 'getIssue']);
+    Route::post('/{issue_id}', [IssueController::class, ' issueBookRenew']);
+   
 });

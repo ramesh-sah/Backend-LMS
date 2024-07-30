@@ -1,36 +1,78 @@
 <?php
 
-namespace App\Http\Controllers\Api\Publisher\Model;
+namespace App\Http\Controllers\Api\Dues\Model;
 
+use App\Http\Controllers\Api\Book\Model\Book;
+use App\Http\Controllers\Api\Employee\Model\Employee;
+use App\Http\Controllers\Api\Issue\Model\Issue;
+use App\Http\Controllers\Api\Member\Model\Member;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Mehradsadeghi\FilterQueryString\FilterQueryString;
 use Ramsey\Uuid\Uuid;
 
-class Publishers extends Model
+class Dues extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids,  SoftDeletes, FilterQueryString;
 
-    protected $table = 'publishers';
-    protected $primaryKey = 'publisher_id';
-    protected $fillable = [
-        'publisher_name',
-        'publication_place',
+    protected $table = 'dues';
+    protected $primaryKey = 'due_id';
+    protected $filters = [
+        'sort',
+        'like',
+        'in',
     ];
+    protected $fillable = [
+      'description',
+      'amount',
+      'due_status',
+      'member_id',
+      'employee_id',
+      'book_id',
+      'issue_id',
 
-    // Static counter for custom IDs
-    // private static $counter = 0;
+    ];
+    public function memberForeign()
+    {
+        return $this->belongsTo(Member::class, 'member_id');
+    }
+    public function employeeForeign()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
+    public function bookForeign()
+    {
+        return $this->belongsTo(Book::class, 'book_id');
+    }
 
-    // public static function create(array $attributes = [])
-    // {
-    //     // Generate a custom ID
-    //     self::$counter++;
-    //     $customId = 'pub-' . str_pad(self::$counter, 4, '0', STR_PAD_LEFT);
+    public function issueForeign()
+    {
+        return $this->belongsTo(Issue::class, 'issue_id');
+    }
 
-    //     // Set the custom ID as the publisher_id
-    //     $attributes['publisher_id'] = $customId;
+    protected $dates = ['deleted_at'];
 
-    //     // Create the publisher
-    //     return parent::create($attributes);
-    // }
+    public static function boot()
+    {
+        parent::boot();
+
+       
+        // Check due date for Dues when retrieving
+        self::retrieved(function (Dues $dues) {
+            if ($dues->due_date <= now() ) {
+                $daysOverdue = now()->diffInDays($dues->due_date);
+                $fineAmount = $daysOverdue * 5; // Calculate fine based on days overdue
+                $dues->amount = $fineAmount; // Store the fine amount
+                Log::info("Dues overdue: {$dues->due_id}, fine: {$fineAmount}");
+                $dues->save(); // Save to persist the changes
+            }
+        });
+
+        Log::info('Dues model booted');
+    }
+
 }

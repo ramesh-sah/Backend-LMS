@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\Api\Book\Controller;
 
+use App\Http\Controllers\Api\Author\Model\Author;
+use App\Http\Controllers\Api\Barcode\Model\Barcode;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Book\Model\Book;
+use App\Http\Controllers\Api\BookOnline\Model\BookOnline;
 use App\Http\Controllers\Api\BookPurchase\Model\BookPurchase;
+use App\Http\Controllers\Api\Category\Model\Category;
+use App\Http\Controllers\Api\CoverImage\Model\CoverImage;
+use App\Http\Controllers\Api\Isbn\Model\Isbn;
+use App\Http\Controllers\Api\Publisher\Model\Publishers;
 use App\Http\Controllers\Helpers\Sort\SortHelper;
 use App\Http\Controllers\Helpers\Filters\FilterHelper;
 use App\Http\Controllers\Helpers\Pagination\PaginationHelper;
@@ -146,6 +153,7 @@ class BookController extends Controller
         ], 200);
     }
 
+
     public function destroyBook(string $book_id)
     {
         // Delete the resource
@@ -157,5 +165,92 @@ class BookController extends Controller
         return response()->json([
             'message' => 'Successfully deleted'
         ], 200);
+    }
+
+    public function addBook(Request $request)
+    {
+        // Post request
+        $request->validate([
+            'class_number' => 'required|string',
+            'book_number' => 'required|string',
+            'title' => 'required|string',
+            'sub_title' => 'string|nullable',
+            'edition_statement' => 'string|nullable',
+            'number_of_pages' => 'required|string',
+            'publication_year' => 'required|string',
+            'series_statement' => 'string|nullable',
+            'quantity' => 'required|integer',
+
+            //cover_images table validation
+            'link' => 'required|url',
+            //book_online table validation
+            "name" => 'string',
+            "price" => 'string',
+            "url" => 'string',
+            //barcode table validation
+            'barcode' => 'required|string',
+
+            //author table validation
+            'author_first_name' => 'required|string',
+            'author_middle_name' => 'string',
+            'author_last_name' => 'required|string',
+
+            //category table validation
+            'category_name' => 'required|string',
+
+            //publisher table validation
+            'publisher_name' => 'required|string',
+            'publication_place' => 'required|string',
+            //isbn table validation
+            'isbn' => 'required|string',
+            'image_id' => 'required|exists:cover_images,image_id',
+            'online_id' => 'exists:book_onlines,online_id',
+            'barcode_id' => 'required|exists:barcodes,barcode_id',
+            'author_id' => 'required|exists:authors,author_id',
+            'category_id' => 'required|exists:categories,category_id',
+            'publisher_id' => 'required|exists:publishers,publisher_id',
+            'isbn_id' => 'required|exists:isbns,isbn_id',
+
+
+        ]);
+
+
+        // Create related records
+        $coverImage = CoverImage::create($request->only('link')); // Only create with 'link'
+        $bookOnline = BookOnline::create($request->only('name', 'price', 'url'));
+        $barcode = Barcode::create($request->only('barcode'));
+        $author = Author::create($request->only('author_first_name', 'author_middle_name', 'author_last_name'));
+        $category = Category::create($request->only('category_name'));
+        $publisher = Publishers::create($request->only('publisher_name', 'publication_place'));
+        $isbn = Isbn::create($request->only('isbn'));
+
+        // Create the BookPurchase record
+        $bookPurchase = BookPurchase::create([
+            'class_number' => $request->class_number,
+            'book_number' => $request->book_number,
+            'title' => $request->title,
+            'sub_title' => $request->sub_title,
+            'edition_statement' => $request->edition_statement,
+            'number_of_pages' => $request->number_of_pages,
+            'publication_year' => $request->publication_year,
+            'series_statement' => $request->series_statement,
+            'quantity' => $request->quantity,
+            'image_id' => $coverImage->image_id, // Use the ID of the created CoverImage
+            'online_id' => $bookOnline->online_id, // Use the ID of the created BookOnline
+            'barcode_id' => $barcode->barcode_id, // Use the ID of the created Barcode
+            'author_id' => $author->author_id, // Use the ID of the created Author
+            'category_id' => $category->category_id, // Use the ID of the created Category
+            'publisher_id' => $publisher->publisher_id, // Use the ID of the created Publisher
+            'isbn_id' => $isbn->isbn_id, // Use the ID of the created Isbn
+        ]);
+        $books = Book::create([
+            'purchase_id' => $bookPurchase->purchase_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Book purchase created successfully',
+            'bookPurchase' => $bookPurchase,
+            'book' => $books,
+        ]);
     }
 }

@@ -25,8 +25,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('image_id', 225);
             $table->foreign('image_id')->references('image_id')->on('cover_images')->onDelete('cascade');
-            $table->string('online_id', 225);
-            $table->foreign('online_id')->references('online_id')->on('book_onlines')->onDelete('cascade');
+            $table->string('online_id', 225)->nullable();
+            $table->foreign('online_id')->references('online_id')->on('book_onlines');
             $table->string('barcode_id', 225);
             $table->foreign('barcode_id')->references('barcode_id')->on('barcodes')->onDelete('cascade');
             $table->string('author_id', 225);
