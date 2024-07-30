@@ -69,7 +69,7 @@ class BookReservation extends Model
             if (
                 $bookReservation->reservation_expiry_date <= now() &&
                 ($bookReservation->reservation_status === 'approved' || $bookReservation->reservation_status === 'pending')
-            ) {
+            ){
                 $bookReservation->reservation_status = 'expired';
                 Log::info('reservation expired during retrieve: ' . $bookReservation->id);
                 $bookReservation->save(); // Save to persist the status change in database

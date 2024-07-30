@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Issue\Controller;
 
 use App\Http\Controllers\Api\Book\Model\Book;
 use App\Http\Controllers\Api\BookReservation\Model\BookReservation;
-use App\Http\Controllers\Api\Dues\Model\Dues ;
+use App\Http\Controllers\Api\Dues\Model\Dues;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Issue\Model\Issue;
 use Illuminate\Http\Request;
@@ -112,7 +112,7 @@ class IssueController extends Controller
             'employee_id' => $issue->employee_id,
             'book_id' => $issue->book_id,
             'issue_id' => $issue->issue_id,
-            'due_date'=>$issue->due_date
+            'due_date' => $issue->due_date
         ]);
 
         // Save the Dues record
@@ -137,13 +137,13 @@ class IssueController extends Controller
         return response()->json([$issue]);
     }
 
-    public function getSpecificUserAllIssue(Request $request ,string $member_id )
+    public function getSpecificUserAllIssue(Request $request, string $member_id)
     {
         $sortBy = $request->input('sort_by'); // sort_by params 
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
-    
-    
+
+
         // Find the specific resource with eager loading of relationships
         $bookIssue = Issue::where('member_id', $member_id)
             ->with('memberForeign', 'employeeForeign', 'membershipForeign', 'reservationForeign', 'bookForeign', 'bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookForeign.bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign')->get();
@@ -152,12 +152,12 @@ class IssueController extends Controller
             return response()->json(['message' => 'No issue found'], 404);
         }
         // Apply Sorting
-        $bookIssue= SortHelper::applySorting($bookIssue, $sortBy, $sortOrder);
+        $bookIssue = SortHelper::applySorting($bookIssue, $sortBy, $sortOrder);
 
         // Apply Filtering
         $bookIssue = FilterHelper::applyFiltering($bookIssue, $filters);
 
-      
+
         // Return the book along with its relationships
         return response()->json([$bookIssue]);
     }
@@ -191,6 +191,11 @@ class IssueController extends Controller
             return response()->json(['message' => 'Issue not found'], 404);
         }
 
+        // Check if renewal limit is reached
+        if ($issue->renewal_count === 'third') {
+            return response()->json(['message' => 'You cannot renew the book further.'], 403); // Forbidden
+        }
+
         // Update renewal_count based on its current value
         $currentRenewalCount = $issue->renewal_count;
         $newRenewalCount = match ($currentRenewalCount) {
@@ -211,7 +216,6 @@ class IssueController extends Controller
             'message' => 'Successfully updated',
             'issue' => $issue,
         ]);
-    
     }
 
 
