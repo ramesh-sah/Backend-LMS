@@ -22,8 +22,6 @@ class BookController extends Controller
 
         $query = Book::query();
 
-
-
         // Apply Sorting
         $query = SortHelper::applySorting($query, $sortBy, $sortOrder);
 
@@ -35,7 +33,6 @@ class BookController extends Controller
 
         // Eager load relationships
         $query->with('bookPurchaseForeign.coverImageForeign', 'bookPurchaseForeign.bookOnlineForeign', 'bookPurchaseForeign.barcodeForeign', 'bookPurchaseForeign.authorForeign', 'bookPurchaseForeign.categoryForeign', 'bookPurchaseForeign.publisherForeign', 'bookPurchaseForeign.isbnForeign');
-
 
         // Get the paginated result
         $book = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
@@ -128,9 +125,6 @@ class BookController extends Controller
         // Return the book purchases along with their relationships
         return response()->json($bookPurchases, 200);
     }
-
-
-
 
     public function updateBook(Request $request, string $book_id)
     {
