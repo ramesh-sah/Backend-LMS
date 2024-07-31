@@ -26,7 +26,7 @@ class DueController extends Controller
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
         $perPage = $request->input('per_page', 10); // Default to 10 items per page
-        $currentPage = $request->input('page', 1); // Default to page 1
+        // $currentPage = $request->input('page', 1); // Default to page 1
 
         $query = Due::query()
             ->leftJoin('payments', 'dues.due_id', '=', 'payments.due_id')
