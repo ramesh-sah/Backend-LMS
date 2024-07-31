@@ -40,28 +40,40 @@ class DueController extends Controller
         $query = FilterHelper::applyFiltering($query, $filters);
 
         // Get Total Count for Pagination
-        $total = $query->count();
-
-        // Get the paginated result
-        $due = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+        // $total = $query->count();
 
         // Apply Pagination
-        $due = PaginationHelper::applyPagination(
-            $due,
-            $perPage,
-            $request->input('page', 1), // Default to page 1
-            $currentPage,
-            $total,
-        );
+        $dues = $query->paginate($perPage);
 
         // Return the data as a JSON response
         return response()->json([
-            'data' => $due->toArray(),
-            'total' => $total,
-            'per_page' => $perPage,
-            'current_page' => $due->currentPage(),
-            'last_page' => $due->lastPage(),
+            'data' => $dues->items(),
+            'total' => $dues->total(),
+            'per_page' => $dues->perPage(),
+            'current_page' => $dues->currentPage(),
+            'last_page' => $dues->lastPage(),
         ], 200);
+
+        // Get the paginated result
+        // $due = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+
+        // // Apply Pagination
+        // $due = PaginationHelper::applyPagination(
+        //     $due,
+        //     $perPage,
+        //     $request->input('page', 1), // Default to page 1
+        //     $currentPage,
+        //     $total,
+        // );
+
+        // // Return the data as a JSON response
+        // return response()->json([
+        //     'data' => $due->toArray(),
+        //     'total' => $total,
+        //     'per_page' => $perPage,
+        //     'current_page' => $due->currentPage(),
+        //     'last_page' => $due->lastPage(),
+        // ], 200);
     }
 
     public function index()

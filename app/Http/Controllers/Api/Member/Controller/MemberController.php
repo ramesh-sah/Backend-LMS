@@ -118,7 +118,6 @@ class MemberController extends BaseController
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
         $perPage = $request->input('per_page', 10); // Default to 10 items per page
-        $currentPage = $request->input('page', 1); // Default to page 1
 
         $query = Member::query();
 
@@ -129,30 +128,20 @@ class MemberController extends BaseController
         $query = FilterHelper::applyFiltering($query, $filters);
 
         // Get Total Count for Pagination
-        $total = $query->count();
-
-        // Get the paginated result
-        $member = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+        // $total = $query->count();
 
         // Apply Pagination
-        $member = PaginationHelper::applyPagination(
-            $member,
-            $perPage,
-            $request->input('page', 1), // Default to page 1
-            $currentPage,
-            $total,
-        );
+        $members = $query->paginate($perPage);
 
         // Return the data as a JSON response
         return response()->json([
-            'data' => $member->toArray(),
-            'total' => $total,
-            'per_page' => $perPage,
-            'current_page' => $member->currentPage(),
-            'last_page' => $member->lastPage(),
+            'data' => $members->items(),
+            'total' => $members->total(),
+            'per_page' => $members->perPage(),
+            'current_page' => $members->currentPage(),
+            'last_page' => $members->lastPage(),
         ], 200);
     }
-
 
     public function getMember(string $member_id)
     {
