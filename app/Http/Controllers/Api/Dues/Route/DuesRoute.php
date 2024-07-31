@@ -6,10 +6,15 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 // Define the routes for Publishers
-Route::prefix('/publishers')->middleware(['auth:sanctum'])->group(function () {
-    Route::get('/', [PublishersController::class, 'index']);
-    Route::get('/{id}', [PublishersController::class, 'show']);
-    Route::post('/', [PublishersController::class, 'store']);
-    Route::put('/{id}', [PublishersController::class, 'update']);
-    Route::delete('/{id}', [PublishersController::class, 'destroy']);
+Route::prefix('/admin/dues')->middleware(['auth:admin'])->group(function () {
+    Route::get('/getAllDues', [PublishersController::class, 'getAllDues']);
+    Route::get('/{due_id}', [PublishersController::class, 'getSpecificUserAllDues']);
+});
+Route::prefix('/employee/dues')->middleware(['auth:employee'])->group(function () {
+    Route::get('/getAllDues', [PublishersController::class, 'getAllDues']);
+    Route::get('/{due_id}', [PublishersController::class, 'getSpecificUserAllDues']);
+});
+
+Route::prefix('/member/dues')->middleware(['auth:member'])->group(function () {
+    Route::get('/{due_id}', [PublishersController::class, 'getSpecificUserAllDues']);
 });

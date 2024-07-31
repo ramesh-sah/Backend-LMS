@@ -11,6 +11,7 @@ Route::prefix('/admin/issue')->middleware(['auth:admin'])->group(function () {
     Route::post('/', [IssueController::class, 'postIssue']);
     Route::put('/{issue_id}', [IssueController::class, 'updateIssue']);
     Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
+    Route::put('/{issue_id}', [IssueController::class, 'checkInIssue']);
 });
 
 Route::prefix('/employee/issue/')->middleware(['auth:employee'])->group(function () {
@@ -20,6 +21,7 @@ Route::prefix('/employee/issue/')->middleware(['auth:employee'])->group(function
     Route::post('/', [IssueController::class, 'postIssue']);
     Route::put('/{issue_id}', [IssueController::class, 'updateIssue']);
     Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
+    Route::put('/{issue_id}', [IssueController::class, 'checkInIssue']);
 });
 
 

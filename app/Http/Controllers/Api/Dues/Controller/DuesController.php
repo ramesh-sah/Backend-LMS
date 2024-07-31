@@ -11,7 +11,7 @@ use App\Http\Controllers\Helpers\Pagination\PaginationHelper;
 
 class DuesController extends Controller
 {
-    public function getAllIssue(Request $request)
+    public function getAllDues(Request $request)
     {
         $sortBy = $request->input('sort_by'); // sort_by params 
         $sortOrder = $request->input('sort_order'); // sort_order params

@@ -4,10 +4,22 @@ use App\Http\Controllers\Api\Payment\Controller\PaymentController; // Correct im
 use Illuminate\Support\Facades\Route;
 
 // Define the routes for Payments
-Route::prefix('/payment')->middleware(['auth:sanctum'])->group(function () {
-    Route::get('/', [PaymentController::class, 'index']);
-    Route::get('/{id}', [PaymentController::class, 'show']);
-    Route::post('/', [PaymentController::class, 'store']);
-    Route::put('/{id}', [PaymentController::class, 'update']);
-    Route::delete('/{id}', [PaymentController::class, 'destroy']);
+Route::prefix('/admin/payment')->middleware(['auth:admin'])->group(function () {
+    Route::get('/getAllPayments', [PaymentController::class, 'getAllPayments']);
+    Route::get('/', [PaymentController::class, 'postPayment']);
+    Route::put('/getPaymentByMemberId{member_id}', [PaymentController::class, 'getPaymentsByMemberId']);
+    Route::delete('/{payment_id}', [PaymentController::class, 'updatePayment']);
+    Route::delete('/{destroyPayment}', [PaymentController::class, 'destroyPayment']);
+});
+
+Route::prefix('/employee/payment')->middleware(['auth:employee'])->group(function () {
+    Route::get('/getAllPayments', [PaymentController::class, 'getAllPayments']);
+    Route::get('/', [PaymentController::class, 'postPayment']);
+    Route::put('/getPaymentByMemberId{member_id}', [PaymentController::class, 'getPaymentsByMemberId']);
+    Route::delete('/{payment_id}', [PaymentController::class, 'updatePayment']);
+    Route::delete('/{destroyPayment}', [PaymentController::class, 'destroyPayment']);
+});
+
+Route::prefix('/employee/payment')->middleware(['auth:employee'])->group(function () {
+    Route::put('/getPaymentByMemberId{member_id}', [PaymentController::class, 'getPaymentsByMemberId']);
 });

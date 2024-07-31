@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\BookReservation\Model\BookReservation;
 use App\Http\Controllers\Api\Dues\Model\Dues;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Issue\Model\Issue;
+use App\Http\Controllers\Api\Membership\Model\Membership;
 use Illuminate\Http\Request;
 
 
@@ -69,9 +70,10 @@ class IssueController extends Controller
             'due_date' => now()->addDays(14),
             'member_id' => 'required|exists:members,member_id',
             'book_id' => 'required|exists:books,book_id',
-            'employee_id' => 'required|exists:employees,employee_id',
-            'membership_id' => 'required|exists:memberships,membership_id',
+            'employee_id' => 'exists:employees,employee_id',
+            'membership_id' => 'exists:memberships,membership_id',
             'reservation_id' => 'exists:book_reservations,reservation_id'
+
 
         ]);
 
@@ -82,12 +84,7 @@ class IssueController extends Controller
             ], 400);
         }
 
-        // $book = Book::find($request->book_id);
-        // if ($book->book_status !== 'available') {
-        //     return response()->json([
-        //         'message' => 'Book is not available',
-        //     ], 400);
-        // }
+       
 
         // Check if a reservation exists and update its status
         if ($request->reservation_id) {
@@ -97,6 +94,13 @@ class IssueController extends Controller
                 $reservation->save();
             }
         }
+        // Check if a membership exists and update its status
+        $memebership_id= Membership::where('member_id',$request->member_id);
+        if($memebership_id){
+            return response-> json([
+                'message' => 'Membership not found',
+            ]);
+        
 
         // Update the book status to reserved
         $book->book_status = 'issued';
@@ -125,7 +129,7 @@ class IssueController extends Controller
         ]);
     }
 
-
+    }
 
     public function getIssue(string $issue_id)
     {
@@ -190,6 +194,7 @@ class IssueController extends Controller
         if (!$issue) {
             return response()->json(['message' => 'Issue not found'], 404);
         }
+       
 
         // Check if renewal limit is reached
         if ($issue->renewal_count === 'third') {
@@ -232,4 +237,36 @@ class IssueController extends Controller
             'message' => 'Successfully deleted'
         ], 200);
     }
+
+
+    public function checkInIssue(string $issue_id)
+    {
+        // Find the issue
+        $issue = Issue::find($issue_id);
+
+        // Handle not found cases
+        if (!$issue) {
+            return response()->json(['message' => 'Issue not found'], 404);
+        }
+
+        // Check dues status
+        $dues = Dues::where('issue_id', $issue->issue_id)->first();
+        if ($dues->due_status === 'pending') {
+            return response()->json(['message' => 'Please clear the dues first'], 400);
+        }
+
+        // Update book status to available
+        $book = Book::find($issue->book_id);
+        if ($book) {
+            $book->book_status = 'available';
+            $book->save();
+        }
+
+        // Update check_in_date on the issue
+        $issue->check_in_date = Carbon::now(); // Get current date and time
+        $issue->save();
+
+        return response()->json(['message' => 'Successfully checked in'], 200);
+    }
+
 }

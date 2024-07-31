@@ -70,6 +70,10 @@ class Dues extends Model
                 Log::info("Dues overdue: {$dues->due_id}, fine: {$fineAmount}");
                 $dues->save(); // Save to persist the changes
             }
+            if ($dues->amount ===0){
+                $dues->due_status='cleared';
+                $dues->save(); // Save to persist the status change
+            }
         });
 
         Log::info('Dues model booted');

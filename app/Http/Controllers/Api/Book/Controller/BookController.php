@@ -171,36 +171,36 @@ class BookController extends Controller
     {
         // Post request
         $request->validate([
-            'class_number' => 'required|string',
-            'book_number' => 'required|string',
-            'title' => 'required|string',
+            'class_number' => 'string',
+            'book_number' => 'string',
+            'title' => 'string',
             'sub_title' => 'string|nullable',
             'edition_statement' => 'string|nullable',
-            'number_of_pages' => 'required|string',
-            'publication_year' => 'required|string',
-            'series_statement' => 'string|nullable',
-            'quantity' => 'required|integer',
+            'number_of_pages' => 'string',
+            'publication_year' => 'string',
+            'series_statement' => 'nullable',
+            'quantity' => 'integer',
 
             //cover_images table validation
-            'link' => 'required|url',
+            'link' => 'url',
             //book_online table validation
             "name" => 'string',
             "price" => 'string',
             "url" => 'string',
             //barcode table validation
-            'barcode' => 'required|string',
+            'barcode' => 'string',
 
             //author table validation
-            'author_first_name' => 'required|string',
+            'author_first_name' => 'string',
             'author_middle_name' => 'string',
-            'author_last_name' => 'required|string',
+            'author_last_name' => 'string',
 
             //category table validation
-            'category_name' => 'required|string',
+            'category_name' => 'string',
 
             //publisher table validation
-            'publisher_name' => 'required|string',
-            'publication_place' => 'required|string',
+            'publisher_name' => 'string',
+            'publication_place' => 'string',
             //isbn table validation
             'isbn' => 'required|string',
             // 'image_id' => 'required|exists:cover_images,image_id',
