@@ -49,6 +49,7 @@ class BookReservation extends Model
     }
 
     protected $dates = ['deleted_at'];
+
     public static function boot()
     {
         parent::boot();
@@ -74,7 +75,6 @@ class BookReservation extends Model
                 Log::info('reservation expired during retrieve: ' . $bookReservation->id);
                 $bookReservation->save(); // Save to persist the status change in database
             }
-          
         });
 
         Log::info('BookReservation model booted');

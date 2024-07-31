@@ -118,6 +118,7 @@ class MemberController extends BaseController
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
         $perPage = $request->input('per_page', 10); // Default to 10 items per page
+        $currentPage = $request->input('page', 1); // Default to page 1
 
         $query = Member::query();
 
@@ -130,12 +131,16 @@ class MemberController extends BaseController
         // Get Total Count for Pagination
         $total = $query->count();
 
+        // Get the paginated result
+        $member = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+
         // Apply Pagination
         $member = PaginationHelper::applyPagination(
-            $query->paginate($perPage)->items(),
+            $member,
             $perPage,
             $request->input('page', 1), // Default to page 1
-            $total
+            $currentPage,
+            $total,
         );
 
         // Return the data as a JSON response

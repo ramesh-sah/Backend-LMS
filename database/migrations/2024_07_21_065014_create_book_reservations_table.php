@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('reservation_id')->primary();
             $table->date('reservation_date')->default(now());
             $table->date('reservation_expiry_date')->default(now()->addDays(3));
-            $table->enum('reservation_status', ['pending', 'approved','expired','rejected'])->default('pending');
+            $table->enum('reservation_status', ['pending', 'approved', 'expired', 'rejected'])->default('pending');
             $table->string('member_id');
             $table->foreign('member_id')->references('member_id')->on('members');
             $table->string('employee_id')->nullable();

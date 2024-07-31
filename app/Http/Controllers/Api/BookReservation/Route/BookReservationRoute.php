@@ -26,6 +26,3 @@ Route::prefix('/member/bookReservation')->middleware('auth:member')->group(funct
     Route::get('/user/{member_id}', [BookReservationController::class, 'getSpecificUserAllBookReservation']);
     Route::delete('/{reservation_id}', [BookReservationController::class, 'destroyBookReservation']);
 });
-
-
- 

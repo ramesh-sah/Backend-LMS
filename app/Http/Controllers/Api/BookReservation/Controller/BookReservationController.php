@@ -13,7 +13,6 @@ use App\Http\Controllers\Helpers\Pagination\PaginationHelper;
 
 class BookReservationController extends Controller
 {
-
     public function getAllBookReservation(Request $request)
     {
         $sortBy = $request->input('sort_by'); // sort_by params 
@@ -35,7 +34,6 @@ class BookReservationController extends Controller
         // Eager load relationships
         $query->with('bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign');
 
-
         // Apply Pagination
         $bookReservation = PaginationHelper::applyPagination(
             $query->paginate($perPage)->items(),
@@ -53,9 +51,6 @@ class BookReservationController extends Controller
             'last_page' => $bookReservation->lastPage(),
         ], 200);
     }
-
-
-
 
     public function postBookReservation(Request $request)
     {
@@ -75,7 +70,6 @@ class BookReservationController extends Controller
         // Update the book status to reserved
         $book->book_status = 'reserved';
         $book->save();
-
 
         $reservation = BookReservation::create($request->all()); // Create a new Book Reservation instance
         return response()->json([
@@ -124,8 +118,9 @@ class BookReservationController extends Controller
         }
 
         // Return the book along with its relationships
-        return response()->json($bookReservation, 200);
+        return response()->json([$bookReservation], 200);
     }
+
     public function updateBookReservation(Request $request, string $reservation_id)
     {
         // Update the resource
