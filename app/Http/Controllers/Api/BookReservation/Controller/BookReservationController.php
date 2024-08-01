@@ -99,8 +99,13 @@ class BookReservationController extends Controller
         return response()->json($bookReservation, 200);
     }
 
-    public function getSpecificUserAllBookReservation(string $member_id)
+    public function getSpecificUserAllBookReservation(Request $request, string $member_id)
     {
+        $sortBy = $request->input('sort_by'); // sort_by params 
+        $sortOrder = $request->input('sort_order'); // sort_order params
+        $filters = $request->input('filters'); // filter params
+        $perPage = $request->input('per_page', 10); // Default to 10 items per page
+
         // Find the specific resource with eager loading of relationships
         $bookReservation = BookReservation::where('member_id', $member_id)
             ->with([
@@ -111,14 +116,28 @@ class BookReservationController extends Controller
                 'bookForeign.bookPurchaseForeign.categoryForeign',
                 'bookForeign.bookPurchaseForeign.publisherForeign',
                 'bookForeign.bookPurchaseForeign.isbnForeign'
-            ])->get();
+            ]);
 
-        if ($bookReservation->isEmpty()) {
-            return response()->json(['message' => 'No reservations found'], 404);
-        }
+        // Apply Sorting
+        $query = SortHelper::applySorting($bookReservation, $sortBy, $sortOrder);
 
-        // Return the book along with its relationships
-        return response()->json([$bookReservation], 200);
+        // Apply Filtering
+        $query = FilterHelper::applyFiltering($query, $filters);
+
+        // Get Total Count for Pagination
+        // $total = $query->count();
+
+        // Apply Pagination
+        $bookReservation = $query->paginate($perPage);
+
+        // Return the data as a JSON response
+        return response()->json([
+            'data' => $bookReservation->items(),
+            'total' => $bookReservation->total(),
+            'per_page' => $bookReservation->perPage(),
+            'current_page' => $bookReservation->currentPage(),
+            'last_page' => $bookReservation->lastPage(),
+        ], 200);
     }
 
     public function updateBookReservation(Request $request, string $reservation_id)
