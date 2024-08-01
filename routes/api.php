@@ -41,3 +41,4 @@ Route::name('')->group(base_path('app/Http/Controllers/Api/Due/Route/DueRoute.ph
 Route::name('')->group(base_path('app/Http/Controllers/Api/NewBookRequest/Route/NewBookRequestRoute.php'));
 Route::name('')->group(base_path('app/Http/Controllers/Api/Notification/Route/NotificationRoute.php'));
 Route::name('')->group(base_path('app/Http/Controllers/Api/MembersNotification/Route/MembersNotificationRoute.php'));
+Route::name('')->group(base_path('app/Http/Controllers/Api/Issue/Route/IssueRoute.php'));

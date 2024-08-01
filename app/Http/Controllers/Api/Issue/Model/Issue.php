@@ -17,18 +17,13 @@ class Issue extends Model
 {
     use HasFactory, HasUuids, SoftDeletes, FilterQueryString;
 
-
-
     protected $table = 'issues';
     protected $primaryKey = 'issue_id';
-
-
     protected $filters = [
         'sort',
         'like',
         'in',
     ];
-
 
     protected $fillable = [
         'due_date',
@@ -40,7 +35,6 @@ class Issue extends Model
         'book_id',
         'membership_id',
         'reservation_id'
-
     ];
     protected $dates = ['deleted_at'];
     public function memberForeign()
@@ -63,5 +57,4 @@ class Issue extends Model
     {
         return $this->belongsTo(Book::class, 'book_id');
     }
-
 }

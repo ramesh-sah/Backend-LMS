@@ -19,7 +19,7 @@ class IssueController extends Controller
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
         $perPage = $request->input('per_page', 10); // Default to 10 items per page
-        $currentPage = $request->input('page', 1); // Default to page 1
+        // $currentPage = $request->input('page', 1); // Default to page 1
 
         $query = Issue::query();
 
@@ -30,7 +30,7 @@ class IssueController extends Controller
         $query = FilterHelper::applyFiltering($query, $filters);
 
         // Get Total Count for Pagination
-        $total = $query->count();
+        // $total = $query->count();
 
         // Eager load relationships
         $query->with('memberForeign', 'employeeForeign', 'membershipForeign', 'reservationForeign', 'bookForeign', 'bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookForeign.bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign');
@@ -148,16 +148,14 @@ class IssueController extends Controller
 
         // Find the specific resource with eager loading of relationships
         $bookIssue = Issue::where('member_id', $member_id)
-            ->with('memberForeign', 'employeeForeign', 'membershipForeign', 'reservationForeign', 'bookForeign', 'bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookForeign.bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign')->get();
+            ->with('memberForeign', 'employeeForeign', 'membershipForeign', 'reservationForeign', 'bookForeign', 'bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookForeign.bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign');
 
-        if ($bookIssue->isEmpty()) {
-            return response()->json(['message' => 'No issue found'], 404);
-        }
         // Apply Sorting
         $bookIssue = SortHelper::applySorting($bookIssue, $sortBy, $sortOrder);
 
         // Apply Filtering
         $bookIssue = FilterHelper::applyFiltering($bookIssue, $filters);
+
         // Apply Pagination
         $issues = $bookIssue->paginate($perPage);
 
