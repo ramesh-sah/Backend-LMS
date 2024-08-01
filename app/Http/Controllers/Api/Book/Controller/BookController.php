@@ -14,11 +14,10 @@ class BookController extends Controller
 {
     public function getAllBook(Request $request)
     {
-        $sortBy = $request->input('sort_by'); // sort_by params 
-        $sortOrder = $request->input('sort_order'); // sort_order params
-        $filters = $request->input('filters'); // filter params
+        $sortBy = $request->input('sort_by', 'default_column'); // default sorting column
+        $sortOrder = $request->input('sort_order', 'asc'); // default sorting order
+        $filters = $request->input('filters', []); // default to empty filters
         $perPage = $request->input('per_page', 10); // Default to 10 items per page
-        $currentPage = $request->input('page', 1); // Default to page 1
 
         $query = Book::query();
 
@@ -28,34 +27,18 @@ class BookController extends Controller
         // Apply Filtering
         $query = FilterHelper::applyFiltering($query, $filters);
 
-        // Get Total Count for Pagination
-        $total = $query->count();
-
         // Eager load relationships
         $query->with('bookPurchaseForeign.coverImageForeign', 'bookPurchaseForeign.bookOnlineForeign', 'bookPurchaseForeign.barcodeForeign', 'bookPurchaseForeign.authorForeign', 'bookPurchaseForeign.categoryForeign', 'bookPurchaseForeign.publisherForeign', 'bookPurchaseForeign.isbnForeign');
 
-        // Get the paginated result
-        $book = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
-
-        // Retrieve foreign key data
-        foreach ($book as $book) {
-            $book->bookPurchaseForeign;        // Get the foreign key data
-        }
-
-        // Apply Pagination Helper
-        $paginatedResult = PaginationHelper::applyPagination(
-            $book,
-            $perPage,
-            $currentPage,
-            $total
-        );
+        // Paginate the results
+        $books = $query->paginate($perPage);
 
         return response()->json([
-            'data' => $paginatedResult->items(),
-            'total' => $paginatedResult->total(),
-            'per_page' => $paginatedResult->perPage(),
-            'current_page' => $paginatedResult->currentPage(),
-            'last_page' => $paginatedResult->lastPage(),
+            'data' => $books->items(),
+            'total' => $books->total(),
+            'per_page' => $books->perPage(),
+            'current_page' => $books->currentPage(),
+            'last_page' => $books->lastPage(),
         ], 200);
     }
 
