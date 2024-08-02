@@ -62,11 +62,11 @@ class EmployeeController extends BaseController
 
         $token = $employee->createToken('admin token', ['employee'])->plainTextToken; //created the admin token
 
-        return response()->json([
-            'data' => [
+        return response()->json(
+             [
                 'employee data' => $employee->jsonSerialize(),
                 'token' => $token,
-            ]
+            
         ], 201);
     }
 
@@ -77,7 +77,7 @@ class EmployeeController extends BaseController
         $request->user('employee')->tokens()->where('id', $token->id)->delete();
 
         return response()->json([
-            'success' => true,
+            'success' =>true,
             'message' => 'Employee  logged out successfully',
         ], 200);
     }
@@ -160,7 +160,7 @@ class EmployeeController extends BaseController
         }
 
 
-        return response()->json([$employee]);
+        return response()->json([$employee],200);
     }
 
     public function updateEmployee(Request $request, string $employee_id)

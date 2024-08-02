@@ -133,7 +133,7 @@ class BookController extends Controller
         }
 
         // Return the book purchases along with their relationships
-        return response()->json($bookPurchases, 200);
+        return response()->json(["bookPurchase"=>$bookPurchases], 200);
     }
 
 
@@ -251,6 +251,6 @@ class BookController extends Controller
             'message' => 'Book purchase created successfully',
             'bookPurchase' => $bookPurchase,
             'book' => $books,
-        ]);
+        ],201);
     }
 }

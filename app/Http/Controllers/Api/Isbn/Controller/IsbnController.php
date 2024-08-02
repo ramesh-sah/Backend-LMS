@@ -17,7 +17,7 @@ class IsbnController extends Controller
         $sortBy = $request->input('sort_by'); // sort_by params 
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
-        $perPage = $request->input('per_page', 5); // Default to 10 items per page
+        $perPage = $request->input('per_page', 10); // Default to 10 items per page
 
         $query = Isbn::query();
 
@@ -39,10 +39,7 @@ class IsbnController extends Controller
         );
 
 
-        // foreach ($bookPurchase as $bookPurchase) {
-        //     $bookPurchase->CoverImageForeign;
-        // }
-
+      
         return response()->json([
             'data' => $isbn,
             'total' => $isbn->total(),
@@ -78,7 +75,7 @@ class IsbnController extends Controller
         if (!$isbn) {
             return response()->json(['message' => 'Isbn number not found'], 404); // Handle not found cases
         }
-        return $isbn;
+        return response()->json(['isbn'=>$isbn],200)
     }
 
     public function updateIsbn(Request $request, string $isbn_id)

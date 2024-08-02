@@ -112,7 +112,7 @@ class BookPurchaseController extends Controller
         $bookPurchase->categoryForeign; // Get the foreign key data
         $bookPurchase->publisherForeign; // Get the foreign key data
         $bookPurchase->isbnForeign; // Get the foreign key data
-        return response()->json($bookPurchase, 200);
+        return response()->json([ 'bookPurchase'=>$bookPurchase] ,200);
     }
 
     public function updateBookPurchase(Request $request, string $purchase_id)

@@ -73,7 +73,7 @@ class NotificationController extends Controller
         if (!$notification) {
             return response()->json(['message' => 'Publisher not found'], 404); // Handle not found cases
         }
-        return response()->json(($notification));
+        return response()->json([$notification],200);
     }
 
     public function updateNotification(Request $request, string $notification_id)

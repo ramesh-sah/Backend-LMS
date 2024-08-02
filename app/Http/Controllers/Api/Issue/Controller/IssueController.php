@@ -99,7 +99,7 @@ class IssueController extends Controller
         if($memebership_id){
             return response-> json([
                 'message' => 'Membership not found',
-            ]);
+            ],200);
         
 
         // Update the book status to reserved
@@ -126,7 +126,7 @@ class IssueController extends Controller
             'message' => 'Successfully created',
             'issue' => $issue, // Return the created issue data
             'dues' => $due // Return the created dues data
-        ]);
+        ],200);
     }
 
     }
@@ -138,7 +138,7 @@ class IssueController extends Controller
         if (!$issue) {
             return response()->json(['message' => 'Issue not found'], 404); // Handle not found cases
         }
-        return response()->json([$issue]);
+        return response()->json([$issue],200);
     }
 
     public function getSpecificUserAllIssue(Request $request, string $member_id)
@@ -163,7 +163,7 @@ class IssueController extends Controller
 
 
         // Return the book along with its relationships
-        return response()->json([$bookIssue]);
+        return response()->json([$bookIssue],200);
     }
 
     public function updateIssue(Request $request, string $issue_id)
@@ -177,7 +177,7 @@ class IssueController extends Controller
         return response()->json([
             'message' => 'Successfully updated',
             'issue' => $issue // Return the updated issue data
-        ]);
+        ],200);
     }
     public function issueBookRenew(Request $request, string $issue_id)
     {
@@ -187,7 +187,7 @@ class IssueController extends Controller
             'renewal_count' => 'required',
 
 
-        ]);
+        ],200);
 
         // Find the issue
         $issue = Issue::find($issue_id);
@@ -215,12 +215,12 @@ class IssueController extends Controller
             'due_date' => Carbon::now()->addDays(14), // Set due_date 14 days from now
             'renewal_request_date' => Carbon::now(), // Set renewal_request_date to current timestamp
             'renewal_count' => $newRenewalCount,
-        ]);
+        ],200);
 
         return response()->json([
             'message' => 'Successfully updated',
             'issue' => $issue,
-        ]);
+        ],201);
     }
 
 

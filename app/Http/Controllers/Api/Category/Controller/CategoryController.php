@@ -26,7 +26,7 @@ class CategoryController extends Controller
         $category = Category::create($request->all()); // Create a new Publisher instance
         return response()->json([
             'message' => 'Successfully created',
-            'publisher' => $category // Return the created publisher data
+            'category' => $category // Return the created publisher data
         ], 201);
     }
 
@@ -37,7 +37,7 @@ class CategoryController extends Controller
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404); // Handle not found cases
         }
-        return  response()->json($category);
+        return  response()->json(['category'=>$category],200);
     }
 
     public function updateCategory(Request $request, string $category_id)

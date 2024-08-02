@@ -39,9 +39,7 @@ class BarcodeController extends Controller
         );
 
 
-        // foreach ($bookPurchase as $bookPurchase) {
-        //     $bookPurchase->CoverImageForeign;
-        // }
+       
 
         return response()->json([
             'data' => $barcode,

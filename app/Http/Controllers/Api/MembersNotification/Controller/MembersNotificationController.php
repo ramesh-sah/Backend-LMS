@@ -83,7 +83,7 @@ class MembersNotificationController extends Controller
         }
         $membersNotification->memberForeign;
         $membersNotification->notificationForeign;
-        return response()->json(($membersNotification)->jsonSerialize(), 200);
+        return response()->json([($membersNotification)->jsonSerialize()], 200);
     }
 
     public function updateMembersNotification(Request $request, string $member_notification_id)

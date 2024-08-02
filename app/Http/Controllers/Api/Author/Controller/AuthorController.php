@@ -17,7 +17,7 @@ class AuthorController extends Controller
         $sortBy = $request->input('sort_by'); // sort_by params 
         $sortOrder = $request->input('sort_order'); // sort_order params
         $filters = $request->input('filters'); // filter params
-        $perPage = $request->input('per_page', 5); // Default to 10 items per page
+        $perPage = $request->input('per_page', 10); // Default to 10 items per page
 
         $query = Author::query();
 
@@ -37,9 +37,7 @@ class AuthorController extends Controller
             $request->input('page', 1), // Default to page 1
             $total
         );
-        // Fetch all the author objects
-        // return Author::all();
-        // $Author = $query->simplePaginate(10);// Use the correct model name
+        
 
         // Return the data as a JSON response
         return response()->json([

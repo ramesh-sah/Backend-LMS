@@ -87,7 +87,7 @@ class DamagedBookController extends Controller
         }
 
         // Return the book along with its relationships
-        return response()->json($damagedBook, 200);
+        return response()->json([ 'damagedBook'=>$damagedBook], 200);
     }
 
 
@@ -102,7 +102,7 @@ class DamagedBookController extends Controller
         $damagedBook->update($request->all());
         return response()->json([
             'message' => 'Successfully updated',
-            'publisher' => $damagedBook // Return the updated publisher data
+            'damagedBook' => $damagedBook // Return the updated publisher data
         ], 200);
     }
 

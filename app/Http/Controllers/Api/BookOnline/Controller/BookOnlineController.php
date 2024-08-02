@@ -76,7 +76,7 @@ class BookOnlineController extends Controller
         if (!$bookOnline) {
             return response()->json(['message' => 'Book Online not found'], 404); // Handle not found cases
         }
-        return $bookOnline;
+        return response()->json(['bookOnline'=>$bookOnline],200);
     }
 
     public function updateBookOnline(Request $request, string $bookOnline_id)

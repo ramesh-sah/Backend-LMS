@@ -87,7 +87,7 @@ class NewBookRequestController extends Controller
         }
         $newBookRequest->memberForeign;  // Get the foreign key data
         $newBookRequest->employeeForeign;
-        return response()->json([$newBookRequest, 200]);
+        return response()->json([$newBookRequest],200);
     }
 
     public function updateNewBookRequest(Request $request, string $request_id)

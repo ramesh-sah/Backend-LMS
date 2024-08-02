@@ -52,7 +52,7 @@ class DuesController extends Controller
             'per_page' => $paginatedResult->perPage(),
             'current_page' => $paginatedResult->currentPage(),
             'last_page' => $paginatedResult->lastPage(),
-        ]);
+        ],200);
     }
 
     
@@ -77,6 +77,6 @@ class DuesController extends Controller
 
       
         // Return the book along with its relationships
-        return response()->json([$duesCheck]);
+        return response()->json(['duesCheck'=>$duesCheck],200);
     }
 }

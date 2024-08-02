@@ -91,7 +91,7 @@ class MembershipController extends Controller
         }
         $membership->memberForeign;        // Get the foreign key data
         $membership->employeeForeign;
-        return response()->json($membership);
+        return response()->json(['membership'=>$membership],200);
     }
 
     public function getUserMembership(string $member_id)
@@ -106,7 +106,7 @@ class MembershipController extends Controller
         // Assuming you have defined relationships `memberForeign` and `employeeForeign` in your Membership model
         $membership->load('memberForeign', 'employeeForeign'); // Eager load the foreign key relationships
 
-        return response()->json($membership);
+        return response()->json(['membership'=>$membership],200);
     }
 
 
@@ -134,6 +134,7 @@ class MembershipController extends Controller
         $membership->delete();
         return response()->json([
             'message' => 'Successfully deleted'
+            'membership'=>$membership
         ], 200);
     }
 }
