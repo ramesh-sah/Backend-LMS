@@ -31,32 +31,29 @@ class NewBookRequestController extends Controller
         $query = FilterHelper::applyFiltering($query, $filters);
 
         // Get Total Count for Pagination
-        $total = $query->count();
+        // $total = $query->count();
 
         // Get the paginated result
-        $bookPurchases = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+        // $bookPurchases = $query->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
 
         // Retrieve foreign key data
-        foreach ($bookPurchases as $bookPurchase) {
-            $bookPurchase->memberForeign;  // Get the foreign key data
-            $bookPurchase->employeeForeign;  // Get the foreign key data
+        // foreach ($query as $bookPurchase) {
+        //     $bookPurchase->memberForeign;  // Get the foreign key data
+        //     $bookPurchase->employeeForeign;  // Get the foreign key data
+        // }
 
-        }
+        // Eager load related data
+        $query->with(['memberForeign', 'employeeForeign']);
 
-        // Apply Pagination Helper
-        $paginatedResult = PaginationHelper::applyPagination(
-            $bookPurchases,
-            $perPage,
-            $currentPage,
-            $total
-        );
+        $bookPurchases = $query->paginate($perPage);
 
+        // Return the data as a JSON response
         return response()->json([
-            'data' => $paginatedResult->items(),
-            'total' => $paginatedResult->total(),
-            'per_page' => $paginatedResult->perPage(),
-            'current_page' => $paginatedResult->currentPage(),
-            'last_page' => $paginatedResult->lastPage(),
+            'data' => $bookPurchases->items(),
+            'total' => $bookPurchases->total(),
+            'per_page' => $bookPurchases->perPage(),
+            'current_page' => $bookPurchases->currentPage(),
+            'last_page' => $bookPurchases->lastPage(),
         ], 200);
     }
 
