@@ -185,7 +185,7 @@ class IssueController extends Controller
         ]);
     }
 
-    public function issueBookRenew(string $issue_id)
+    public function renewRequest(string $issue_id)
     {
         // Find the issue
         $issue = Issue::find($issue_id);
@@ -217,11 +217,6 @@ class IssueController extends Controller
 
         if (!$issue_id) {
             return response(["message" => "Issue Not Found"], 404);
-        }
-
-        // Check if renewal limit is reached
-        if ($issue->renewal_count === 'third') {
-            return response()->json(['message' => 'Book cannot be renew.'], 403); // Forbidden
         }
 
         // Close the old issue
