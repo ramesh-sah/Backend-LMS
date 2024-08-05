@@ -29,24 +29,36 @@ class BookReservationController extends Controller
         $query = FilterHelper::applyFiltering($query, $filters);
 
         // Get Total Count for Pagination
-        $total = $query->count();
+        // $total = $query->count();
 
         // Eager load relationships
-        $query->with('bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign');
+        $query->with('memberForeign', 'employeeForeign', 'bookForeign', 'bookForeign.bookPurchaseForeign.coverImageForeign', 'bookForeign.bookPurchaseForeign.bookOnlineForeign', 'bookForeign.bookPurchaseForeign.barcodeForeign', 'bookForeign.bookPurchaseForeign.authorForeign', 'bookPurchaseForeign.categoryForeign', 'bookForeign.bookPurchaseForeign.publisherForeign', 'bookForeign.bookPurchaseForeign.isbnForeign');
 
         // Apply Pagination
-        $bookReservation = PaginationHelper::applyPagination(
-            $query->paginate($perPage)->items(),
-            $perPage,
-            $request->input('page', 1), // Default to page 1
-            $total
-        );
+        // $bookReservation = PaginationHelper::applyPagination(
+        //     $query->get(),
+        //     $perPage,
+        //     $request->input('page', 1), // Default to page 1
+        //     $total
+        // );
+
+        // Return the data as a JSON response
+        //     return response()->json([
+        //         'data' => $bookReservation->toArray(),
+        //         'total' => $total,
+        //         'per_page' => $perPage,
+        //         'current_page' => $bookReservation->currentPage(),
+        //         'last_page' => $bookReservation->lastPage(),
+        //     ], 200);
+        // Apply Pagination
+
+        $bookReservation = $query->paginate($perPage);
 
         // Return the data as a JSON response
         return response()->json([
-            'data' => $bookReservation->toArray(),
-            'total' => $total,
-            'per_page' => $perPage,
+            'data' => $bookReservation->items(),
+            'total' => $bookReservation->total(),
+            'per_page' => $bookReservation->perPage(),
             'current_page' => $bookReservation->currentPage(),
             'last_page' => $bookReservation->lastPage(),
         ], 200);
