@@ -9,7 +9,7 @@ Route::prefix('/admin/issue')->middleware(['auth:admin'])->group(function () {
     Route::get('/getUserAllIssue/{member_id}', [IssueController::class, 'getSpecificUserAllIssue']);
     Route::get('/{issue_id}', [IssueController::class, 'getIssue']);
     Route::post('/', [IssueController::class, 'postIssue']);
-    Route::post('/renew', [IssueController::class, 'renewIssue']);
+    Route::post('/renew/{issue_id}', [IssueController::class, 'renewIssue']);
     Route::put('/{issue_id}', [IssueController::class, 'updateIssue']);
     Route::delete('/{issue_id}', [IssueController::class, 'destroyIssue']);
 });
