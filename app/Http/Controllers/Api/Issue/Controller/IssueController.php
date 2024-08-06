@@ -38,6 +38,18 @@ class IssueController extends Controller
         // Apply Pagination
         $issues = $query->paginate($perPage);
 
+        // Calculate days left if checkout_date is empty
+        foreach ($issues as $issue) {
+            if (empty($issue->checkout_date)) {
+                $dueDate = $issue->due_date;
+                $today = now();
+                $daysLeft = $today->diffInDays($dueDate, false); // If negative, due_date is in the past
+                $issue->days_left = $daysLeft;
+            } else {
+                $issue->days_left = null; // Or some default value if checkout_date is not empty
+            }
+        }
+
         // Return the data as a JSON response
         return response()->json([
             'data' => $issues->items(),
@@ -85,13 +97,6 @@ class IssueController extends Controller
                 'message' => 'Book is not available',
             ], 400);
         }
-
-        // $book = Book::find($request->book_id);
-        // if ($book->book_status !== 'available') {
-        //     return response()->json([
-        //         'message' => 'Book is not available',
-        //     ], 400);
-        // }
 
         // Check if a reservation exists and update its status
         if ($request->reservation_id) {
@@ -158,6 +163,18 @@ class IssueController extends Controller
 
         // Apply Pagination
         $issues = $bookIssue->paginate($perPage);
+
+        // Calculate days left if checkout_date is empty
+        foreach ($issues as $issue) {
+            if (empty($issue->checkout_date)) {
+                $dueDate = $issue->due_date;
+                $today = now();
+                $daysLeft = $today->diffInDays($dueDate, false); // If negative, due_date is in the past
+                $issue->days_left = $daysLeft;
+            } else {
+                $issue->days_left = null; // Or some default value if checkout_date is not empty
+            }
+        }
 
         // Return the data as a JSON response
         return response()->json([

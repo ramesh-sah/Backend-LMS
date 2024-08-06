@@ -36,5 +36,4 @@ class Book extends Model
         return $this->belongsTo(BookPurchase::class, 'purchase_id');
     }
     protected $dates = ['deleted_at'];
-
 }
